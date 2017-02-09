@@ -1,0 +1,22 @@
+{
+  "name": "deliciaso",
+  "description": "A complete solution for Bakers",
+  "main": "",
+  "authors": [
+    "Teja <sama.teja@aguaisolutions.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-dynforms": "^0.0.4",
+    "angular-material-datetimepicker": "^1.4.0"
+  }
+}

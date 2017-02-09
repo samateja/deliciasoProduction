@@ -1,0 +1,166 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    // Smart Wizard
+    $('#wizard').smartWizard({
+    onLeaveStep:leaveAStepCallback,
+    reverseButtonsOrder:true,
+    keyNavigation:true
+
+        });
+
+  });
+  function leaveAStepCallback(obj, context)
+  {
+     
+    if (context.fromStep > context.toStep) {
+      // alert("Leaving step " + context.fromStep + " to go to step " + context.toStep+" GOING back");
+      return validateStepsBack(context.fromStep); // return false to stay on step and true to continue navigatio
+
+   } else {
+    //  alert("Leaving step " + context.fromStep + " to go to step " + context.toStep+" GOING forward");
+     return validateSteps(context.fromStep); // return false to stay on step and true to continue navigatio
+   }
+  }
+
+
+    function validateSteps(stepnumber){
+         console.log(stepnumber)
+          var isStepValid;
+              if(stepnumber == 1)
+                      {
+                        $('#Step2Error').html('');
+                        var isStepValid;
+                          
+                          var cart = $('[ng-controller="myCtrl"]').scope().ShowCart;
+                          
+                          if (cart.length == 0){
+                              $('#Step2Validation').show(1000).delay(2000).hide(1000);;
+                              $('#Step2Error').html("Please Add Prodcuts to Cart");
+                              isStepValid = false;
+                          }
+                          else{
+                              isStepValid=true;
+                          }
+                        
+                        
+                        return isStepValid;
+                      }
+                         else if (stepnumber==2) {
+                             
+                                  $('#Step3Error').html('');
+                                  $('#ShowDeliveryDate').html('');
+                                  $('#ShowDeliveryTime').html('');
+                                  $('#ShowPickUpDate').html('');
+                                  $('#ShowPickUpTime').html('');
+                                  $('#ShowDeliveryAddress').html('');
+                                  console.log("coming to delivery section")
+                                  var DeliveryDetails = $('[ng-controller="myCtrl"]').scope().billing;
+                                  if(DeliveryDetails.DeliveryType!=undefined && DeliveryDetails.DeliveryType!="")
+                                  {
+                                        if(DeliveryDetails.DeliveryType == "DoorDelivery")
+                                        {
+                                        var DeliveryAddress = $('[ng-controller="myCtrl"]').scope().demoTest;
+                                        if(DeliveryDetails.DeliveryDateTime!=undefined &&DeliveryDetails.DeliveryDateTime!="")
+                                        {
+                                                   
+                                          var SetTimeZone  = moment.tz(DeliveryDetails.DeliveryDateTime, "Asia/kolkata");
+                                          var FinalDateTime = SetTimeZone.format();
+                                          var SplittedDate = FinalDateTime.split("T");
+                                          $('#ShowDeliveryDate').html(SplittedDate[0]);
+                                          var SplittedTime = SplittedDate[1].split("+");
+                                          $('#ShowDeliveryTime').html(SplittedTime[0]);
+
+                                          if(DeliveryAddress!=undefined)
+                                          {
+                                            if(DeliveryAddress.SelectedDeliveryAddress!=undefined)
+                                            {
+                                                if(DeliveryAddress.SelectedDeliveryAddress!="")
+                                                {
+                                                  var DeliveryAddressData = $('[ng-controller="myCtrl"]').scope().DeliveryAddress;
+                                                  console.log(DeliveryAddressData);
+
+                                                  if(DeliveryAddressData!=undefined)
+                                                  {
+                                                    for (var j=0;j<DeliveryAddressData.length;j++)
+                                                    {
+                                                      if(DeliveryAddressData[j].Id == DeliveryAddress.SelectedDeliveryAddress)
+                                                      {
+                                                        $('#ShowDeliveryAddress').html(DeliveryAddressData[j].DeliveryAddress);
+                                                        isStepValid =true;
+                                                        return isStepValid;
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                                else{
+                                                $('#Step3Validation').show(1000).delay(2000).hide(1000);;
+                                                $('#Step3Error').html("Select Delivery Address.");
+                                                }
+                                            }
+                                            else if (DeliveryAddress.DeliveryAddress)
+                                            {
+                                                if(DeliveryAddress.DeliveryAddress!="")
+                                                {
+                                                  $('#ShowDeliveryAddress').html(DeliveryAddress.DeliveryAddress);
+                                                  isStepValid =true;
+                                                  return isStepValid;
+                                                }
+                                                else {
+                                                  $('#Step3Validation').show(1000).delay(2000).hide(1000);;
+                                                  $('#Step3Error').html("Delivery address required.");
+                                                }
+                                            }
+                                            else {
+                                              $('#Step3Validation').show(1000).delay(2000).hide(1000);;
+                                              $('#Step3Error').html("Delivery address required.");
+                                            }
+                                          }
+                                          else {
+                                            $('#Step3Validation').show(1000).delay(2000).hide(1000);;
+                                            $('#Step3Error').html("Delivery address required.");
+                                          }
+                                        }
+                                        else {
+                                          $('#Step3Validation').show(1000).delay(2000).hide(1000);;
+                                          $('#Step3Error').html("Delivery Date  required.");
+                                        }
+                                        }
+                                        else {
+                                          if(DeliveryDetails.PickUpDateTime!=undefined && DeliveryDetails.PickUpDateTime!="")
+                                          {
+                                            var SetTimeZone  = moment.tz(DeliveryDetails.PickUpDateTime, "Asia/kolkata");
+                                            var FinalDateTime = SetTimeZone.format();
+                                            var SplittedDate = FinalDateTime.split("T");
+                                            $('#ShowPickUpDate').html(SplittedDate[0]);
+                                            var SplittedTime = SplittedDate[1].split("+");
+                                            $('#ShowPickUpTime').html(SplittedTime[0]);
+                                            isStepValid=true;
+                                            return isStepValid;
+                                          }
+                                            
+                                            if(DeliveryDetails.PickUpDateTime == ""){
+                                                 var now = new Date();
+                                                DeliveryDetails.PickUpDateTime = now.format("dd/MM/yyyy hh:mm TT");
+                                            }
+                                          else
+                                          {
+                                            $('#Step3Validation').show(1000).delay(2000).hide(1000);;
+                                            $('#Step3Error').html("Pick up date required.");
+                                          }
+                                        }
+                                  }
+                                  else {
+                                    $('#Step3Validation').show(1000).delay(2000).hide(1000);;
+                                    $('#Step3Error').html("Delivery Type required.");
+                                  }
+                                }
+          }
+
+
+          function validateStepsBack(step)
+          {
+          var isStepValid = true;
+          return isStepValid;
+          }
+
+</script>

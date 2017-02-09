@@ -1,0 +1,322 @@
+<script>
+var app3 = angular.module('app1', ['ngTouch', 'ui.grid','ui.grid.pinning','ui.grid.pagination','ui.grid.resizeColumns','ui.grid.selection','ui.grid.autoResize','ui.grid.exporter']);
+
+app3.controller('PastOrderCtrl', ['$rootScope', '$scope', '$http', 'modal', '$interval', function ($rootScope, $scope, $http, modal, $interval) {
+  var myModal = new modal();
+
+  $scope.hideGrid = true;
+
+  $rootScope.gridOptions = {
+    onRegisterApi: function (gridApi) {
+      $scope.gridApi = gridApi;
+
+      // call resize every 500 ms for 5 s after modal finishes opening - usually only necessary on a bootstrap modal
+      $interval( function() {
+        $scope.gridApi.core.handleWindowResize();
+      }, 500, 10);
+      }
+  };
+
+
+  $scope.showModal = function() {
+    if($scope.PastOrder!=undefined)
+    {
+      if($scope.PastOrder.Mobile!="" && $scope.PastOrder.Mobile!=null)
+      {
+        if($scope.PastOrder.Mobile.length=="10")
+        {
+          if($scope.PastOrder.Mobile[0]=="9"||$scope.PastOrder.Mobile[0]=="8"||$scope.PastOrder.Mobile[0]=="7")
+          {
+            $rootScope.gridOptions={};
+            $rootScope.gridOptions1={};
+            $rootScope.gridOptions.data=[];
+            $rootScope.gridOptions1.data=[];
+                $http.get('/dashboard/api/GetPastOrderDetails/'+$scope.PastOrder.Mobile)
+                  .success(function(data) {
+                    console.log(data);
+                    if(data)
+                    {
+                      if(data.Pending)
+                      {
+                        $rootScope.gridOptions.data = data.Pending;
+                        $rootScope.gridOptions1.data = data.Partial;
+
+                    $rootScope.gridOptions.columnDefs= [{field:'Name', displayName:'Name',width:100},
+                    {field:'Mobile', displayName:'Mobile',width:100},
+                    {field:'Email', displayName:'Email',width:100},
+                    {field:'CakeName', displayName:'Cake Flavour',width:100},
+                    {field:'Size', displayName:'Size',width:50},
+                    {field:'Shape', displayName:'Shape',width:100},
+                    {field:'Type', displayName:'Type',width:100},
+                    {field:'DeliveryType', displayName:'Delivery Type',width:100},
+                    {field:'Amount', displayName:'Amount',width:80},
+                    {field:'CakeOrderId', cellTemplate: '<button class="btn btn-success"  ng-click="grid.appScope.CommonPendingPaymentModal(row)">Payment</button>',displayName:'Make Payment',width:120,enableFiltering: false,enableCellEdit:false}
+                    ];
+                    $rootScope.gridOptions1.columnDefs = [{field:'Name', displayName:'Name',width:100},
+                {field:'Mobile', displayName:'Mobile',width:100},
+                {field:'Email', displayName:'Email',width:100},
+                {field:'CakeName', displayName:'Cake Flavour',width:100},
+                {field:'Size', displayName:'Size',width:50},
+                {field:'Shape', displayName:'Shape',width:100},
+                {field:'Type', displayName:'Type',width:100},
+                {field:'DeliveryType', displayName:'Delivery Type',width:100},
+                {field:'Amount', displayName:'Amount',width:100},
+                {field:'CakeOrderId', cellTemplate: '<button class="btn btn-success" ng-click="grid.appScope.CommonPartialPaymentModal(row)">Payment</button>',displayName:'Make Payment',width:120,enableFiltering: false,enableCellEdit:false}
+                ]
+                      }
+              else {
+
+              alert(data.Message);
+              return;
+              }
+               }
+            myModal.open();
+                });
+
+          }
+          else {
+            alert("Invalid mobile number");
+          }
+        }
+        else {
+          alert("Mobile number should be 10 digits.");
+        }
+      }
+      else {
+        alert("Mobile number should not be null");
+      }
+    }
+    else {
+      alert("Mobile number required for search.");
+    }
+
+  };
+$rootScope.CommonPendingPaymentModal = function(row){
+  $rootScope.CommonPendingPayment = row.entity;
+  console.log("here");
+  console.log($rootScope.CommonPendingPayment);
+$('#CommonPendingPaymentModal').modal('show');
+};
+$rootScope.CommonPartialPaymentModal = function(row){
+  $rootScope.CommonPartialPayment = row.entity;
+  $rootScope.CommonPartialPayment.DueAmount = $rootScope.CommonPartialPayment.BalanceAmount;
+  $rootScope.CommonPartialPayment.PaymentStatus = "2";
+  $rootScope.CommonPartialPayment.PaymentType = "0";
+  console.log($rootScope.CommonPartialPayment);
+$('#CommonPartialPaymentModal').modal('show');
+};
+
+
+$rootScope.MakeCommonPendingPayment = function()
+{
+  $('#PendingPaymentError').html('');
+  if($scope.CommonPendingPayment!=undefined)
+  {
+    $http.post('/payment/ValidatePendingPayment',$scope.CommonPendingPayment).success(function(response){
+      console.log(response);
+      if(response)
+      {
+        $('#PendingPaymentValidation').show(1000).delay(2000).hide(1000);;
+        $('#PendingPaymentError').html(response[0].msg);
+      }
+      else
+      {
+        $scope.CommonPendingPayment.BalanceAmount = parseInt($scope.CommonPendingPayment.Amount)-parseInt($scope.CommonPendingPayment.PaidAmount);
+
+        var dateTime = new Date().toISOString();
+        var SplittedDate = dateTime.split("T");
+        var CurrentDate = SplittedDate[0];
+
+        var Data = {'CakeOrderId':$scope.CommonPendingPayment.CakeOrderId,'PaidAmount':$scope.CommonPendingPayment.PaidAmount,
+      'PaymentType':$scope.CommonPendingPayment.PaymentType,'NeftTxnNo':$scope.CommonPendingPayment.NeftTxnNo,'CardTxnNo':$scope.CommonPendingPayment.CardTxnNo,'PaymentStatus':$scope.CommonPendingPayment.PaymentStatus,
+      'Discount':$scope.CommonPendingPayment.Discount,'BalanceAmount':$scope.CommonPendingPayment.BalanceAmount,'PaidDate':CurrentDate};
+
+        $http.post('/payment/MakePayment',Data).success(function(data){
+          console.log(data);
+          if(data!="" && data!=null)
+          {
+            $('#CommonPendingPaymentModal').modal('hide');
+            $scope.CommonPendingPayment="";
+            alert("Payment Updated Successfully.");
+            $rootScope.close();
+          }
+        });
+      }
+    });
+  }
+  else {
+  alert("Payment data is not defined.");
+  }
+};
+
+$rootScope.MakeCommonPartialPayment = function(){
+  if($scope.CommonPartialPayment!=undefined)
+  {
+    $http.post('/payment/ValidatePartialPayment',$scope.CommonPartialPayment).success(function(response){
+      if(response)
+      {
+        $('#PartialPaymentValidation').show(1000).delay(2000).hide(1000);;
+        $('#PartialPaymentError').html(response[0].msg);
+        // alert(response[0].msg);
+      }
+      else {
+
+         $scope.CommonPartialPayment.FinalBalanceAmount = parseInt($scope.CommonPartialPayment.BalanceAmount)-parseInt($scope.CommonPartialPayment.DueAmount);
+        $scope.CommonPartialPayment.TotalPaid = parseInt($scope.CommonPartialPayment.PaidAmount)+parseInt($scope.CommonPartialPayment.DueAmount);
+
+        var dateTime = new Date().toISOString();
+        var SplittedDate = dateTime.split("T");
+        var CurrentDate = SplittedDate[0];
+
+        var Data = {'CakeOrderId':$scope.CommonPartialPayment.CakeOrderId,'PaidAmount':$scope.CommonPartialPayment.TotalPaid,
+      'PaymentType':$scope.CommonPartialPayment.PaymentType,'NeftTxnNo':$scope.CommonPartialPayment.NeftTxnNo,'CardTxnNo':$scope.CommonPartialPayment.CardTxnNo,'PaymentStatus':$scope.CommonPartialPayment.PaymentStatus,
+      'Discount':$scope.CommonPartialPayment.Discount,'BalanceAmount':$scope.CommonPartialPayment.FinalBalanceAmount,'PaidDate':CurrentDate};
+
+                  $http.post('/payment/MakePayment',Data).success(function(data){
+                  console.log(data);
+                  if(data!="" && data!=null)
+                  {
+                  $('#CommonPartialPaymentModal').modal('hide');
+                  $scope.CommonPartialPayment="";
+                  alert("Payment Updated Successfully.");
+                  $rootScope.close();
+                  }
+                  });
+      }
+
+    });
+  }
+  else {
+    alert("Payment data is not defined.");
+  }
+};
+
+$rootScope.GetCommonPendingPaymentType= function()
+{
+  var val= $scope.CommonPendingPayment.PaymentType;
+  console.log(val);
+  if(val == "0"){
+    $rootScope.CommonPendingecm =false;
+    $rootScope.CommonPendingpos = false;
+  }
+  else if (val == "1") {
+    $rootScope.CommonPendingecm =true;
+    $rootScope.CommonPendingpos = false;
+
+  }
+  else if (val=="2") {
+    $rootScope.CommonPendingecm =false;
+    $rootScope.CommonPendingpos = true;
+  }
+};
+$scope.GetCommonPartialPaymentType = function(){
+  var val= $scope.CommonPartialPayment.PaymentType;
+  if(val == "0"){
+    $scope.CommonPartialecm =false;
+    $scope.CommonPartialpos = false;
+  }
+  else if (val == "1") {
+    $scope.CommonPartialecm =true;
+    $scope.CommonPartialpos = false;
+
+  }
+  else if (val=="2") {
+    $scope.CommonPartialecm =false;
+    $scope.CommonPartialpos = true;
+  }
+};
+
+$scope.SetCommonPendingPaymentStatus = function(){
+  console.log("came here");
+  if((parseInt($scope.CommonPendingPayment.PaidAmount) == parseInt($scope.CommonPendingPayment.Amount)) || (parseInt($scope.CommonPendingPayment.PaidAmount) > parseInt($scope.CommonPendingPayment.Amount)))
+  {
+    $scope.CommonPendingPayment.PaymentStatus = "2";
+  }
+else if (parseInt($scope.CommonPendingPayment.PaidAmount) < parseInt($scope.CommonPendingPayment.Amount)) {
+  $scope.CommonPendingPayment.PaymentStatus = "1";
+}
+else {
+  return;
+}
+};
+
+$scope.SetCommonPartialPaymentStatus = function(){
+
+  $scope.CommonPartialPayment.Discount="";
+  if((parseInt($scope.CommonPartialPayment.BalanceAmount) == parseInt($scope.CommonPartialPayment.DueAmount)) || (parseInt($scope.CommonPartialPayment.DueAmount) > parseInt($scope.CommonPartialPayment.BalanceAmount)))
+  {
+    $scope.CommonPartialPayment.PaymentStatus = "2";
+  }
+else if (parseInt($scope.CommonPartialPayment.DueAmount) < parseInt($scope.CommonPartialPayment.BalanceAmount)) {
+  $scope.CommonPartialPayment.PaymentStatus = "1";
+}
+else {
+  return;
+}
+
+};
+
+$scope.SetCommonPendingDiscount = function(){
+    $scope.CommonPendingDiscount=false;
+  console.log($scope.CommonPendingPayment.PaymentStatus);
+  if($scope.CommonPendingPayment.PaymentStatus == "2")
+  {console.log("inside");
+    if (parseInt($scope.CommonPendingPayment.PaidAmount) < parseInt($scope.CommonPendingPayment.Amount))
+    {
+      $scope.CommonPendingDiscount=true;
+      $scope.CommonPendingPayment.Discount = parseInt($scope.CommonPendingPayment.Amount)-parseInt($scope.CommonPendingPayment.PaidAmount);
+    }
+  }
+};
+$scope.SetCommonPartialDiscount = function(){
+  $scope.CommonPartialDiscount=false;
+  if($scope.CommonPartialPayment.PaymentStatus == "2")
+  {
+    if (parseInt($scope.CommonPartialPayment.DueAmount) < parseInt($scope.CommonPartialPayment.BalanceAmount))
+    {
+      $scope.CommonPartialDiscount=true;
+      $scope.CommonPartialPayment.Discount = parseInt($scope.CommonPartialPayment.BalanceAmount)-parseInt($scope.CommonPartialPayment.DueAmount);
+    }
+  }
+};
+
+
+
+
+}]);
+
+app3.factory('modal', ['$compile', '$rootScope', function ($compile, $rootScope) {
+  return function() {
+    var elm;
+    var modal = {
+      open: function() {
+
+        var html = '<div class="modal" ng-style="modalStyle">{{modalStyle}}<div class="modal-dialog" style="width:1037px !important;"><div class="modal-content"><div class="modal-header"></div><div class="modal-body"><div class="" role="tabpanel" data-example-id="togglable-tabs"><ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist"><li role="presentation" class="active"><a href="#Modaltab_content1" id="Modalhome-tab" role="tab" data-toggle="tab" aria-expanded="true">Pending Orders</a></li><li role="presentation" class=""><a href="#Modaltab_content2" role="tab" id="Modalprofile-tab" data-toggle="tab" aria-expanded="false">Partial Orders</a></li></ul><div id="myTabContent" class="tab-content"><div role="tabpanel" class="tab-pane fade active in" id="Modaltab_content1" aria-labelledby="home-tab"><div id="grid1" ui-grid="gridOptions" ui-grid-pinning ui-grid-pagination  class="grid" ui-grid-auto-resize ui-grid-resize-columns ui-grid-move-columns ui-grid-selection ui-grid-exporter ></div></div><div role="tabpanel" class="tab-pane fade" id="Modaltab_content2" aria-labelledby="profile-tab"><div id="grid1" ui-grid="gridOptions1" ui-grid-pinning ui-grid-pagination  class="grid" ui-grid-auto-resize ui-grid-resize-columns ui-grid-move-columns ui-grid-selection ui-grid-exporter ></div></div></div></div></div><div class="modal-footer"><button id="buttonClose" class="btn btn-primary" ng-click="close()">Close</button></div></div></div></div>';
+        elm = angular.element(html);
+        angular.element(document.body).prepend(elm);
+
+        $rootScope.close = function() {
+          modal.close();
+        };
+
+        $rootScope.modalStyle = {"display": "block"};
+
+        $compile(elm)($rootScope);
+      },
+      close: function() {
+        if (elm) {
+          elm.remove();
+        }
+      }
+    };
+
+    return modal;
+  };
+}]);
+
+
+
+angular.element(document).ready(function() {
+               angular.bootstrap(document.getElementById("SecondCtrl"), ['myApp']);
+         });
+</script>

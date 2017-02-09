@@ -1,0 +1,363 @@
+
+      <!-- page content -->
+      <div class="right_col" role="main" style="height:900px !important;" ng-app="myApp" id="SecondCtrl" ng-controller="myCtrl" ng-init="init()">
+
+        <br /><br />
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+
+
+  <div class="alert alert-success"  id="SmsSuccess" style="display:none;text-align:center;">
+  <strong id="SmsSuccessMessage"></strong>
+  </div>
+  <div class="alert alert-danger"  id="SmsError" style="display:none;text-align:center;">
+  <strong id="SmsErrorMessage"></strong>
+  </div>
+
+
+          <div class="x_panel">
+            <div class="x_title">
+              <h2><i class="fa fa-user"></i> Customer Details</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+            <button type="button" class="btn btn-success" ng-click="SendBulkSmsModal()">Send SMS</button>
+            <button type="button" class="btn btn-success" onclick="window.location.href='/SendEmail'">Send Mail</button>
+
+          
+
+            <!-- <div ui-grid="gridOptions" ui-grid-pagination ui-grid-selection class="grid"  ></div> -->
+
+            <div ui-grid="gridOptions" external-scopes="$scope" class="grid1" ng-style="gridOptions.data.length>=gridOptions.paginationPageSize? {height: (gridOptions.paginationPageSize*30)+120+'px'}:{height: (gridOptions.data.length*30)+120+'px'}" ui-grid-resize-columns ui-grid-pagination ui-grid-selection ui-grid-exporter ui-grid-auto-resize></div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <div class="modal fade" id="SendBulkSmsModal" role="dialog" style="display:none;top:20px;">
+            <div class="modal-dialog" >
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Send SMS</h4>
+                </div>
+                <div class="modal-body">
+                  <form class="form-horizontal form-label-left" style="min-height: 200px;">
+
+                      <div class="alert alert-danger"  id="SmsBulkError" style="display:none;text-align:center;">
+                      <strong id="SmsBulkErrorMessage"></strong>
+                      </div>
+
+                    <div class="form-group">
+                    <ul class="tags" >
+                      <li ng-repeat="BulkData in mySelectedRows">
+                        <a href="#" class="tag" style="text-decoration:none;">{{BulkData.Mobile}}</a>
+                      </li>
+                    </ul>
+                  </div>
+
+                    <div class="form-group">
+                      <label class="control-label col-md-3" for="last-name">Compose SMS <span class="required">*</span>
+                      </label>
+                      <div class="col-md-8">
+                        <textarea  class="form-control col-md-6 col-xs-12" style="height:120px;" ng-model="Bulk.SMSContent"></textarea>
+                      </div>
+                    </div>
+
+
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                  <button type="button" class="btn btn-primary" style="float:right;" ng-click="SendBulkSms()">SEND</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- send promotional  mails -->
+          
+        <div class="modal fade" id="SendEmailModal" role="dialog" style="display:none;top:20px;">
+            <div class="modal-dialog" >
+SendEmailModal
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Send Promotional Email</h4>
+                </div>
+                <div class="modal-body">
+                  <form class="form-horizontal form-label-left" style="min-height: 200px;">
+
+                  
+
+                    <div class="form-group">
+                      <label class="control-label col-md-3" for="last-name">Subject <span class="required">*</span>
+                      </label>
+                      <div class="col-md-8">
+                        <input class="form-control col-md-6 col-xs-12" style="height:120px;" ng-model="email.subject"></>
+                      </div>
+                    </div>
+                     <div class="form-group">
+                      <label class="control-label col-md-3" for="last-name">Tags <span class="required">*</span>
+                      </label>
+                      <div class="col-md-8">
+  <multiple-autocomplete ng-model="selectedList"
+     object-property="name"
+     suggestions-arr="optionsList">
+</multiple-autocomplete>
+                      </div>
+                    </div>
+
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                  <button type="button" class="btn btn-primary" style="float:right;" ng-click="SendBulkSms()">SEND</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+      </div>
+      <!-- /page content -->
+
+    </div>
+
+  </div>
+
+  <div id="custom_notifications" class="custom-notifications dsp_none">
+    <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group">
+    </ul>
+    <div class="clearfix"></div>
+    <div id="notif-group" class="tabbed_notifications"></div>
+  </div>
+
+  <script>
+
+
+
+  var app = angular.module('myApp', ['ui.grid','ui.grid.pinning','ui.grid.pagination','ui.grid.resizeColumns','ui.grid.selection','ui.grid.autoResize','ui.grid.exporter']);
+
+  // app.controller('myCtrl', function($scope,$http,$timeout, $q, $log,uiGridConstants) {
+app.controller('myCtrl', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, $uiGridConstants) {
+console.log("Came to secnd");
+$scope.optionsList = [
+  {id: 1,  name : "Java"},
+  {id: 2,  name : "C"},
+  {id: 3,  name : "C++"},
+  {id: 4,  name : "AngularJs"},
+  {id: 5,  name : "JavaScript"}
+];
+    $scope.GetCustomerData = function(){
+
+        $http.get('/customers/GetCustomerData/api').success(function(response){
+          console.log(response);
+          $scope.AllCustomerData = response
+        });
+
+    };
+    $scope.GetCustomerData();
+    // enableSorting: true,
+    // paginationPageSizes: [10,25, 50, 75],
+    // paginationPageSize: 10,
+    // useExternalPagination: true,
+    // enableColumnResizing: true,
+    // enableFiltering: true,
+    //  enableRowSelection: true,
+    //  enableSelectAll: true,
+    //  selectionRowHeaderWidth: 35,
+    //  rowHeight: 35,
+    //  showGridFooter:true,
+      $scope.gridOptions = {
+          data: 'AllCustomerData',
+          enableSorting: true,
+                      enableFiltering: true,
+                      showGridFooter: true,
+                      showColumnFooter: true,
+                      exporterMenuCsv: true,
+                      enableGridMenu: true,
+                      rowHeight:45.82,
+                      paginationPageSizes: [15, 30, 45],
+                      paginationPageSize: 15,
+                      enableHorizontalScrollbar: 1,
+
+                      exporterCsvFilename: 'myFile.csv',
+   exporterPdfDefaultStyle: {fontSize: 9},
+   exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
+   exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
+   exporterPdfHeader: { text: "Customer Data", style: 'headerStyle' },
+   exporterPdfFooter: function ( currentPage, pageCount ) {
+     return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
+   },
+   exporterPdfCustomFormatter: function ( docDefinition ) {
+     docDefinition.styles.headerStyle = { fontSize: 22, bold: true };
+     docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
+     return docDefinition;
+   },
+   exporterPdfOrientation: 'portrait',
+   exporterPdfPageSize: 'LETTER',
+   exporterPdfMaxGridWidth: 500,
+   exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+   onRegisterApi: function(gridApi){
+     $scope.gridApi = gridApi;
+   },
+
+
+          columnDefs: [{field:'Name', displayName:'Name',width:150},
+      {field:'Mobile', displayName:'Mobile',width:100},
+      {field:'Email', displayName:'Email',width:180},
+      {field:'Gender', displayName:'Gender',width:100},
+      {field:'Address', displayName:'Address',width:333},
+      {field:'Zip', displayName:'Zip',width:100},
+      // {field:'Id', cellTemplate: '<a href="#" ng-click="grid.appScope.SendSms(row)">Send SMS</a>',displayName:'Send SMS',width:120,enableFiltering: false,enableCellEdit:false}
+    ]
+    };
+$scope.gridOptions.onRegisterApi = function(gridApi){
+//set gridApi on scope
+$scope.gridApi = gridApi;
+};
+
+// $scope.SendSms = function(row){
+// $scope.AllCustData = "";
+// $scope.Individual = "";
+// $scope.AllCustData = row.entity;
+// console.log($scope.AllCustData);
+// $('#SendSMSModal').modal('show');
+// };
+
+$scope.SendBulkSmsModal = function()
+{
+  $scope.mySelectedRows = "";
+  $scope.Bulk = "";
+  $scope.mySelectedRows = $scope.gridApi.selection.getSelectedRows();
+  console.log($scope.mySelectedRows.length);
+  for(var i=0;i<$scope.mySelectedRows.length;i++)
+  {
+    if($scope.mySelectedRows[i].Mobile=="" || $scope.mySelectedRows[i].Mobile==null|| $scope.mySelectedRows[i].Mobile==" ")
+    {
+      $scope.mySelectedRows.splice(i, 1);
+    }
+  }
+  console.log($scope.mySelectedRows.length);
+  if($scope.mySelectedRows!="")
+  {
+    $('#SendBulkSmsModal').modal('show');
+  }
+  else {
+    $('#SmsError').show(1000).delay(2000).hide(1000);;
+    $('#SmsErrorMessage').html("Select minimum one customer");
+  }
+};
+
+var FullMobile =[];
+$scope.SendBulkSms = function(){
+
+  if($scope.Bulk.SMSContent!=undefined)
+  {
+    if($scope.Bulk.SMSContent!="")
+    {
+
+            for (var i=0;i<$scope.mySelectedRows.length;i++)
+            {
+            FullMobile.push($scope.mySelectedRows[i].Mobile);
+            }
+            var CommaSeperatedMobile = FullMobile.join();
+            var FinalBulkSMSData = {"To":CommaSeperatedMobile,"Message":$scope.Bulk.SMSContent};
+
+                $http.post('/customers/SendBulkSMS',FinalBulkSMSData).success(function(response){
+
+                    if(response)
+                    {
+                    $('#SendBulkSmsModal').modal('hide');
+                    $('#SmsSuccess').show(1000).delay(2000).hide(1000);;
+                    $('#SmsSuccessMessage').html(response.message);
+                    }
+                    else
+                    {
+                    $('#SmsError').show(1000).delay(2000).hide(1000);;
+                    $('#SmsErrorMessage').html("Not possible to execute now! Sorry for the inconvenience.");
+                    }
+
+                });
+    }
+    else {
+      $('#SmsBulkError').show(1000).delay(2000).hide(1000);;
+      $('#SmsBulkErrorMessage').html("Message should not be empty.");
+    }
+  }
+  else {
+    $('#SmsBulkError').show(1000).delay(2000).hide(1000);;
+    $('#SmsBulkErrorMessage').html("Message should not be empty.");
+  }
+
+};
+
+
+
+
+
+}]);
+</script>
+
+
+
+</body>
+<!-- <div class="modal fade" id="SendSMSModal" role="dialog" style="display:none;top:20px;">
+    <div class="modal-dialog" >
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Send SMS</h4>
+        </div>
+        <div class="modal-body">
+
+          <form class="form-horizontal form-label-left" style="min-height: 200px;">
+
+            <div class="alert alert-danger"  id="SmsIndividualError" style="display:none;text-align:center;">
+            <strong id="SmsIndividualErrorMessage"></strong>
+            </div>
+
+            <ul class="tags">
+              <li><a href="#" class="tag" style="text-decoration:none;">{{AllCustData.Mobile}}</a></li>
+
+            </ul>
+
+            <div class="form-group">
+              <label class="control-label col-md-3" for="last-name">Compose SMS <span class="required">*</span>
+              </label>
+              <div class="col-md-8">
+                <textarea  class="form-control col-md-6 col-xs-12" style="height:120px;" ng-model="Individual.SMSContent"></textarea>
+              </div>
+            </div>
+
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+          <button type="button" class="btn btn-primary" style="float:right;" ng-click="SendIndividualSms()">SEND</button>
+        </div>
+      </div>
+
+    </div>
+  </div> -->
+
+
+
+
+
+
+
+
+
+
+</html>

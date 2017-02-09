@@ -1,0 +1,1212 @@
+      <!-- page content -->
+      <div class="right_col" role="main" style="height:900px !important;" id="SecondCtrl" ng-app="myApp"ng-controller="myCtrl" ng-init="init()">
+
+
+        <!-- top tiles -->
+
+        <!-- /top tiles -->
+        <br /><br />
+
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2><i class="fa fa-shopping-cart"></i>&nbsp;Orders</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+
+              <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                  <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Pending Orders</a>
+                  </li>
+                  <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Partial Orders</a>
+                  </li>
+                  <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Completed Orders</a>
+                  </li>
+                  <li role="presentation" class=""><a href="#tab_content4" role="tab" id="profile-tab3" data-toggle="tab" aria-expanded="false">Cancelled Orders</a>
+                  </li>
+
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                  <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                    <div class="alert alert-success"  id="PendingPaymentSuccess" style="display:none;text-align:center;">
+                    <strong id="PendingPaymentSuccessMessage"></strong>
+                    </div>
+
+
+                    <div class="row" id="NewOrder" >
+
+                      <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+                            <div class="row">
+                              <div class="col-md-12">
+                              <div  ui-grid="ShowPendingPayment" ui-grid-pinning ui-grid-pagination  class="grid" ui-grid-auto-resize ui-grid-resize-columns ui-grid-move-columns ui-grid-selection ui-grid-exporter ng-style="ShowPendingPayment.data.length>=ShowPendingPayment.paginationPageSize? {height: (ShowPendingPayment.paginationPageSize*30)+120+'px'}:{height: (ShowPendingPayment.data.length*30)+120+'px'}" ></div>
+                                <br><br><br>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                  <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                    <div class="alert alert-success"  id="PartialPaymentSuccess" style="display:none;text-align:center;">
+                    <strong id="PartialPaymentSuccessMessage"></strong>
+                    </div>
+                    <div class="row" id="NewOrder" >
+
+                      <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+                            <div class="row">
+                              <div class="col-md-12">
+                              <div  ui-grid="ShowPartialPayment" ui-grid-pinning ui-grid-pagination  class="grid" ui-grid-auto-resize ui-grid-resize-columns ui-grid-move-columns ui-grid-selection ui-grid-exporter ng-style="ShowPartialPayment.data.length>=ShowPartialPayment.paginationPageSize? {height: (ShowPartialPayment.paginationPageSize*30)+120+'px'}:{height: (ShowPartialPayment.data.length*30)+120+'px'}" ></div>
+                                <br><br><br>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+                  <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+
+                    <div class="alert alert-success"  id="CompletedPaymentSuccess" style="display:none;text-align:center;">
+                    <strong id="CompletedPaymentSuccessMessage"></strong>
+                    </div>
+                    <div class="row" id="NewOrder" >
+
+                      <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+                            <div class="row">
+                              <div class="col-md-12">
+                              <div  ui-grid="ShowCompletedPayment" ui-grid-pinning ui-grid-pagination  class="grid" ui-grid-auto-resize ui-grid-resize-columns ui-grid-move-columns ui-grid-selection ui-grid-exporter ng-style="ShowCompletedPayment.data.length>=ShowCompletedPayment.paginationPageSize? {height: (ShowCompletedPayment.paginationPageSize*30)+120+'px'}:{height: (ShowCompletedPayment.data.length*30)+120+'px'}" ></div>
+                                <br><br><br>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div role="tabpanel" class="tab-pane fade" id="tab_content4" aria-labelledby="profile-tab">
+                    <div class="row" id="NewOrder" >
+
+                      <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+                            <div class="row">
+                              <div class="col-md-12">
+                              <div  ui-grid="ShowCancelledOrders" ui-grid-pinning ui-grid-pagination  class="grid" ui-grid-auto-resize ui-grid-resize-columns ui-grid-move-columns ui-grid-selection ui-grid-exporter ng-style="ShowCancelledOrders.data.length>=ShowCancelledOrders.paginationPageSize? {height: (ShowCancelledOrders.paginationPageSize*30)+120+'px'}:{height: (ShowCancelledOrders.data.length*30)+120+'px'}" ></div>
+                                <br><br><br>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="ModalPayment" role="dialog" style="display:none;top:50px;">
+            <div class="modal-dialog" style="width: 40%;">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Make Payment</h4>
+                </div>
+                <div class="modal-body">
+                  <form class="form-horizontal form-label-left" style="min-height: 300px;">
+
+                                          <div class="alert alert-danger"  id="PendingValidationDIV" style="display:none;text-align:center;">
+                                          <strong id="PendingValidationMSG"></strong>
+                                          </div>
+
+                        <div class="form-group">
+                          <label class="control-label col-md-3 " for="last-name">Order Id
+                          </label>
+                          <div class="col-md-6">
+                            <input type="text" id="mobile" name="last-name" disabled class="form-control col-md-7 col-xs-12" ng-model="Payment.InvoiceId">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Amount Payable</label>
+                          <div class="col-md-6">
+                            <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" disabled name="middle-name" ng-model="Payment.TotalAmount">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Payment Type</label>
+                          <div class="col-md-6">
+                            <div class="btn-group" data-toggle="buttons">
+                              <label><input type="radio" name="test" ng-model="Payment.PaymentType" value="0"ng-click="GetPaymentType()"/> Cash</label>
+                              <label><input type="radio" name="test" ng-model="Payment.PaymentType" value="1" ng-click="GetPaymentType()"/> NEFT</label>
+                              <label><input type="radio" name="test" ng-model="Payment.PaymentType" value="2" ng-click="GetPaymentType()"/> Card</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group" ng-show="ecm">
+                          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">NEFT Txn Number</label>
+                          <div class="col-md-6">
+                            <input  class="form-control col-md-7 col-xs-12" type="text" placeholder="optional.." ng-model="Payment.NeftTxnNo">
+                          </div>
+                        </div>
+
+                        <div class="form-group" ng-show="pos">
+                          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Card Txn Number</label>
+                          <div class="col-md-6">
+                            <input  class="form-control col-md-7 col-xs-12" type="text" placeholder="optional.." ng-model="Payment.CardTxnNo">
+                          </div>
+                        </div>
+
+
+                        <div class="form-group">
+                          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Amount Paid</label>
+                          <div class="col-md-6">
+                            <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="Payment.Payable_amount" ng-keyup="SetPaymentStatus()">
+                          </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Payment Status</label>
+                          <div class="col-md-6">
+                            <select class="select2_single form-control" tabindex="-1" ng-model="Payment.PaymentStatus" ng-click="SetDiscount()">
+                                                      <option value="0">Pending</option>
+                                                      <option value="1">Partial</option>
+                                                      <option value="2" >Completed</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group" ng-show="discount">
+                          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Discount (Rs.)</label>
+                          <div class="col-md-6">
+                            <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="Payment.Discount">
+                          </div>
+                        </div>
+
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                  <button type="button" class="btn btn-success" style="float:right;" ng-click="MakePayment()">Make Payment</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+
+          <div class="modal fade" id="ModalPartialPayment" role="dialog" style="display:none;top:50px;">
+              <div class="modal-dialog" style="width: 40%;">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Make Payment</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form class="form-horizontal form-label-left" style="min-height: 300px;">
+
+                                            <div class="alert alert-danger"  id="PartialPaymentValidation1" style="display:none;text-align:center;">
+                                            <strong id="PartialPaymentError1"></strong>
+                                            </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-4 " for="last-name">Order Id
+                            </label>
+                            <div class="col-md-6">
+                              <input type="text" id="mobile" name="last-name" disabled class="form-control col-md-7 col-xs-12" ng-model="PartialMakePayment.InvoiceId">
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Total Amount Payable </label>
+                            <div class="col-md-6">
+                              <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" disabled ng-model="PartialMakePayment.TotalAmount">
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Paid Amount</label>
+                            <div class="col-md-6">
+                              <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" disabled ng-model="PartialMakePayment.Payable_amount" >
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Due Amount </label>
+                            <div class="col-md-6">
+                              <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text"  name="middle-name"   ng-model="PartialMakePayment.DueAmount" ng-keyup="SetPartialPaymentStatus()">
+                            </div>
+                          </div>
+
+                          <!-- <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Pay</label>
+                            <div class="col-md-6">
+                              <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" disabled name="middle-name"   ng-model="PartialPayment.pay">
+                            </div>
+                          </div> -->
+
+
+
+                          <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">Payment Type</label>
+                            <div class="col-md-6">
+                              <div class="btn-group" data-toggle="buttons">
+                                <label><input type="radio" name="test" ng-model="PartialMakePayment.PaymentType" value="0"ng-click="GetPartialPaymentType()"/> Cash</label>
+                                <label><input type="radio" name="test" ng-model="PartialMakePayment.PaymentType" value="1" ng-click="GetPartialPaymentType()"/> NEFT</label>
+                                <label><input type="radio" name="test" ng-model="PartialMakePayment.PaymentType" value="2" ng-click="GetPartialPaymentType()"/> Card</label>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group" ng-show="Partialecm">
+                            <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">NEFT Txn Number</label>
+                            <div class="col-md-6">
+                              <input  class="form-control col-md-7 col-xs-12" type="text" placeholder="optional.." ng-model="PartialMakePayment.NeftTxnNo">
+                            </div>
+                          </div>
+
+                          <div class="form-group" ng-show="Partialpos">
+                            <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Card Txn Number</label>
+                            <div class="col-md-6">
+                              <input  class="form-control col-md-7 col-xs-12" type="text" placeholder="optional.." ng-model="PartialMakePayment.CardTxnNo">
+                            </div>
+                          </div>
+
+
+
+                          <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">Payment Status</label>
+                            <div class="col-md-6">
+                              <select class="select2_single form-control" tabindex="-1" ng-model="PartialMakePayment.PaymentStatus" ng-click="SetPartialDiscount()">
+                                                        <option value="0">Pending</option>
+                                                        <option value="1">Partial</option>
+                                                        <option value="2" >Completed</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group" ng-show="Partialdiscount">
+                            <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Discount </label>
+                            <div class="col-md-6">
+                              <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="PartialMakePayment.Discount">
+                            </div>
+                          </div>
+
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                    <button type="button" class="btn btn-success" style="float:right;" ng-click="MakePartialPayment()">Make Payment</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+
+          <div class="modal fade" id="ModalOrderDetails" role="dialog" style="display:none;top:30px;min-height: 400px;">
+              <div class="modal-dialog" style="width: 45%;">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Order Details</h4>
+                  </div>
+                  <div class="modal-body">
+                        <div class="form-horizontal form-label-left">
+                          <h2 class="StepTitle">&nbsp;</h2>
+
+                          <div class="alert alert-danger"  id="PendingEditOrderValidation" style="display:none;text-align:center;">
+                          <strong id="PendingEditOrderError"></strong>
+                          </div>
+                            hello
+                         <div class="row" id="EditPendingOrder" >
+                          <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                              <div class="x_title">
+                                <div class="clearfix"></div>
+                              </div>
+                              <div class="x_content">
+                                <div class="row">
+<!--
+                                  <div class="col-md-12">
+                                  <div  ui-grid="EditPendingOrder" ui-grid-pinning ui-grid-pagination  class="grid" ui-grid-auto-resize ui-grid-resize-columns ui-grid-move-columns ui-grid-selection ui-grid-exporter ng-style="EditPendingOrder.data.length>=EditPendingOrder.paginationPageSize? {height: (EditPendingOrder.paginationPageSize*30)+120+'px'}:{height: (EditPendingOrder.data.length*30)+120+'px'}" ></div>
+                                    <br><br><br>
+                                  </div>
+-->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                            
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                    <button type="button" class="btn btn-success"  style="float:right;" ng-click="EditCakeOrder()">SAVE</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="ModalPartialOrderDetails" role="dialog" style="display:none;top:30px;min-height: 400px;">
+                <div class="modal-dialog" style="width: 45%;">
+
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Order Details</h4>
+                    </div>
+                    <div class="modal-body">
+                          <div class="form-horizontal form-label-left">
+                            <h2 class="StepTitle">&nbsp;</h2>
+
+                            <div class="alert alert-danger"  id="PartialEditOrderValidation" style="display:none;text-align:center;">
+                            <strong id="PartialEditOrderError"></strong>
+                            </div>
+
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Cake Flavour:
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="#" editable-text="PartialDetails.CakeName">{{ PartialDetails.CakeName || "empty" }}</a>
+                                    </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Quantity:
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="#" editable-text="PartialDetails.Quantity">{{ PartialDetails.Quantity || "empty" }}</a>
+                                    </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Size:</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="#" editable-text="PartialDetails.Size">{{ PartialDetails.Size || "empty" }}</a>
+                                    </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Shape:</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="#" editable-text="PartialDetails.Shape">{{ PartialDetails.Shape || "empty" }}</a>
+                                    </div>
+                                    </div>
+
+                                    <!-- <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Type:</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <a href="#" editable-select="PartialDetails.Type" e-ng-options="s.value as s.text for s in statuses">
+                                        {{ showStatus() }}
+                                        </a>
+                                    </div>
+                                    </div> -->
+
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Amount:
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="#" editable-text="PartialDetails.Amount">{{ PartialDetails.Amount || "empty" }}</a>
+                                    </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Occasion:
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="#" editable-text="PartialDetails.Occasion">{{ PartialDetails.Occasion || "empty" }}</a>
+                                    </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Message:</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="#" editable-textarea="PartialDetails.Message">{{ PartialDetails.Message || "empty" }}</a>
+                                    </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Decoration Instruction:</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="#" editable-textarea="PartialDetails.DecorationInstr">{{ PartialDetails.DecorationInstr || "empty" }}</a>
+                                    </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Ingredient Instruction:</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="#" editable-textarea="PartialDetails.IngredientInstr">{{ PartialDetails.IngredientInstr || "empty" }}</a>
+                                    </div>
+                                    </div>
+                          </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                      <button type="button" class="btn btn-success"  style="float:right;" ng-click="EditPartialCakeOrder()">SAVE</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal fade" id="ModalCompletedOrderDetails" role="dialog" style="display:none;top:30px;min-height: 400px;">
+                  <div class="modal-dialog" style="width: 45%;">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Order Details</h4>
+                      </div>
+                      <div class="modal-body">
+                            <div class="form-horizontal form-label-left">
+                              <h2 class="StepTitle">&nbsp;</h2>
+
+                              <div class="alert alert-danger"  id="CompletedEditOrderValidation" style="display:none;text-align:center;">
+                              <strong id="CompletedEditOrderError"></strong>
+                              </div>
+
+
+                                      <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Cake Flavour:
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <a href="#" editable-text="CompletedDetails.CakeName">{{ CompletedDetails.CakeName || "empty" }}</a>
+                                      </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Quantity:
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <a href="#" editable-text="CompletedDetails.Quantity">{{ CompletedDetails.Quantity || "empty" }}</a>
+                                      </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                      <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Size:</label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <a href="#" editable-text="CompletedDetails.Size">{{ CompletedDetails.Size || "empty" }}</a>
+                                      </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Shape:</label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <a href="#" editable-text="CompletedDetails.Shape">{{ CompletedDetails.Shape || "empty" }}</a>
+                                      </div>
+                                      </div>
+
+                                      <!-- <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Type:</label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                          <a href="#" editable-select="CompletedDetails.Type" e-ng-options="s.value as s.text for s in statuses">
+                                          {{ showStatus() }}
+                                          </a>
+                                      </div>
+                                      </div> -->
+
+                                      <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Amount:
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <a href="#" editable-text="CompletedDetails.Amount">{{ CompletedDetails.Amount || "empty" }}</a>
+                                      </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Occasion:
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <a href="#" editable-text="CompletedDetails.Occasion">{{ CompletedDetails.Occasion || "empty" }}</a>
+                                      </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                      <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Message:</label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <a href="#" editable-textarea="CompletedDetails.Message">{{ CompletedDetails.Message || "empty" }}</a>
+                                      </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                      <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Decoration Instruction:</label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <a href="#" editable-textarea="CompletedDetails.DecorationInstr">{{ CompletedDetails.DecorationInstr || "empty" }}</a>
+                                      </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                      <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Ingredient Instruction:</label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <a href="#" editable-textarea="CompletedDetails.IngredientInstr">{{ CompletedDetails.IngredientInstr || "empty" }}</a>
+                                      </div>
+                                      </div>
+                            </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                        <button type="button" class="btn btn-success" style="float:right;" ng-click="EditCompletedCakeOrder()">SAVE</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal fade" id="CancelPendingOrder" role="dialog" style="display:none;top:30px;min-height: 400px;">
+                    <div class="modal-dialog" style="width: 45%;">
+
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Cancel Order</h4>
+                        </div>
+                        <div class="modal-body">
+                          <div dw-loading="CancelOrderSpinner"></div>
+                              <div class="form-horizontal form-label-left">
+                                <h2 class="StepTitle">&nbsp;</h2>
+
+                                <div class="alert alert-danger"  id="CancelPendingValidation" style="display:none;text-align:center;">
+                                <strong id="CancelPendingError"></strong>
+                                </div>
+                                        <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reason*:
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                          <textarea  class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="CancelOrderPending.CancelReason"></textarea>
+                                        </div>
+                                        </div>
+                              </div>
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                          <button type="button" class="btn btn-danger"  style="float:right;" ng-click="CancelPendingOrder()">Cancel Order</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+      </div>
+      <!-- /page content -->
+
+    </div>
+
+  </div>
+
+  <div id="custom_notifications" class="custom-notifications dsp_none">
+    <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group">
+    </ul>
+    <div class="clearfix"></div>
+    <div id="notif-group" class="tabbed_notifications"></div>
+  </div>
+
+
+
+  <script>
+
+  var app = angular.module('myApp', ['ui.grid','ngTouch','ui.grid.pinning','ui.grid.pagination','ui.grid.resizeColumns','ui.grid.selection','ui.grid.autoResize','ui.grid.exporter','xeditable','darthwade.dwLoading',]);
+  app.run(function(editableOptions) {
+    editableOptions.theme = 'bs3';
+  });
+  app.controller('myCtrl',function($scope,$http,$timeout,$q, $log,$filter,$loading) {
+      
+
+
+  $scope.GetPaymentdata = function(){
+
+    $http.get('/order/GetOrderData/api').success(function(response){
+        console.log(response)
+      var SplittedDate=[];
+     $scope.PendingPayment = response.Pending;
+     $scope.Pending_products_data = response.Pending_products_data;
+     $scope.PartialPayment = response.Partial;
+     $scope.partial_products_data =response.partial_products_data;
+     $scope.CompletedPayment = response.Completed;
+     $scope.completed_products_data = response.completed_products_data;
+     $scope.CancelledOrders = response.Cancelled;
+     $scope.cancelled_products_data = response.cancelled_products_data;
+     console.log($scope.CancelledOrders);
+for(var i=0;i<$scope.CancelledOrders.length;i++)
+{
+  if($scope.CancelledOrders[i].CancelledDate!=""&&$scope.CancelledOrders[i].CancelledDate!=null)
+  {
+    SplittedDate[i] = $scope.CancelledOrders[i].CancelledDate.split("T");
+    $scope.CancelledOrders[i].CancelledDate = SplittedDate[i][0];
+  }
+
+}
+
+
+    });
+  };
+
+      $scope.GetPaymentdata();
+      
+    $scope.ShowPendingPayment = {
+        data: 'PendingPayment',
+        paginationPageSizes: [15, 30, 45],
+        paginationPageSize: 15,
+         enableColumnResizing: true,
+         enableFiltering: true,
+         enableGridMenu: true,
+         showColumnFooter: true,
+         enableHorizontalScrollbar: 1,
+         enableSorting: true,
+         rowHeight:45.82,
+        columnDefs: [{field:'Name', displayName:'Name'},
+    {field:'Mobile', displayName:'Mobile'},
+    {field:'Email', displayName:'Email'},
+    {field:'InvoiceId', displayName:'Invoice'},
+    {field:'DeliveryType', displayName:'DeliveryType'},
+    {field:'TotalAmount', displayName:'Amount'},
+    {field:'InvoiceId', cellTemplate: '<a href="#" class="btn btn-success btn-xs" ng-click="grid.appScope.PaymentModal(row)" style="margin-left: 10px;margin-top: 10px;"><i class="fa fa-money"></i></a>&nbsp;<a href="#" class="btn btn-info btn-xs" ng-click="grid.appScope.OrderDetailsModal(row)" style="margin-left: 10px;margin-top: 10px;"><i class="fa fa-pencil"></i></a>&nbsp;<a href="#" class="btn btn-danger btn-xs" ng-click="grid.appScope.CancelPendingOrderModal(row)" style="margin-left: 10px;margin-top: 10px;"><i class="fa fa-close"></i></a>',displayName:'Actions',enableFiltering: false,enableCellEdit:false}
+]
+
+  };
+      
+
+
+  $scope.ShowPartialPayment = {
+      data: 'PartialPayment',
+      paginationPageSizes: [15, 30, 45],
+      paginationPageSize: 15,
+       enableColumnResizing: true,
+       enableFiltering: true,
+       enableGridMenu: true,
+       showColumnFooter: true,
+       enableHorizontalScrollbar: 1,
+       enableSorting: true,
+       rowHeight:45.82,
+       columnDefs: [{field:'Name', displayName:'Name'},
+    {field:'Mobile', displayName:'Mobile'},
+    {field:'Email', displayName:'Email'},
+    {field:'InvoiceId', displayName:'Invoice'},
+    {field:'DeliveryType', displayName:'DeliveryType'},
+    {field:'TotalAmount', displayName:'TotalAmount'},
+    {field:'InvoiceId', cellTemplate: '<a href="#" class="btn btn-success btn-xs" ng-click="grid.appScope.PartialPaymentModal(row)" style="margin-left: 10px;margin-top: 10px;"><i class="fa fa-money"></i></a>&nbsp;<a href="#" class="btn btn-info btn-xs" ng-click="grid.appScope.PartialDetailsModal(row)" style="margin-left: 10px;margin-top: 10px;"><i class="fa fa-pencil"></i></a>&nbsp;',displayName:'Actions',enableFiltering: false,enableCellEdit:false}
+
+]
+};
+
+$scope.ShowCompletedPayment = {
+    data: 'CompletedPayment',
+    paginationPageSizes: [15, 30, 45],
+    paginationPageSize: 15,
+     enableColumnResizing: true,
+     enableFiltering: true,
+     enableGridMenu: true,
+     showColumnFooter: true,
+     enableHorizontalScrollbar: 1,
+     enableSorting: true,
+     rowHeight:45.82,
+    columnDefs: [
+{field:'InvoiceId', displayName:'Invoice'},
+{field:'Name', displayName:'Name'},
+{field:'Mobile', displayName:'Mobile'},
+{field:'Email', displayName:'Email'},
+{field:'DeliveryType', displayName:'Delivery Type'},
+{field:'TotalAmount', displayName:'Amount'},
+{field:'Payable_amount', displayName:'Paid Amount'},
+{field:'Discount', displayName:'Discount'}
+]
+};
+$scope.ShowCancelledOrders = {
+    data: 'CancelledOrders',
+    paginationPageSizes: [15, 30, 45],
+    paginationPageSize: 15,
+     enableColumnResizing: true,
+     enableFiltering: true,
+     enableGridMenu: true,
+     showColumnFooter: true,
+     enableHorizontalScrollbar: 1,
+     enableSorting: true,
+     rowHeight:45.82,
+    columnDefs: [{field:'Name', displayName:'Name'},
+{field:'Mobile', displayName:'Mobile'},
+{field:'Email', displayName:'Email'},
+{field:'DeliveryType', displayName:'Delivery Type'},
+{field:'TotalAmount', displayName:'Amount'},
+{field:'CancelReason', displayName:'Reason',cellTooltip:
+        function( row, col ) {
+          return 'Reason: ' + row.entity.CancelReason;
+        }},
+{field:'CancelledDate', displayName:'Cancelled Date'}
+
+]
+};
+
+$scope.PendingOrderDetailsModal = {
+    data: 'Details',
+    columnDefs: [{field:'CakeName', displayName:'Cake Name'},
+{field:'Amount', displayName:'Amount'},
+]};
+
+
+  $scope.GetPaymentType= function()
+  {
+    var val= $scope.Payment.PaymentType;
+    if(val == "0"){
+      $scope.ecm =false;
+      $scope.pos = false;
+    }
+    else if (val == "1") {
+      $scope.ecm =true;
+      $scope.pos = false;
+
+    }
+    else if (val=="2") {
+      $scope.ecm =false;
+      $scope.pos = true;
+    }
+  };
+  $scope.GetPartialPaymentType = function(){
+    var val= $scope.PartialMakePayment.PaymentType;
+    if(val == "0"){
+      $scope.Partialecm =false;
+      $scope.Partialpos = false;
+    }
+    else if (val == "1") {
+      $scope.Partialecm =true;
+      $scope.Partialpos = false;
+
+    }
+    else if (val=="2") {
+      $scope.Partialecm =false;
+      $scope.Partialpos = true;
+    }
+  };
+
+  $scope.SetPaymentStatus = function(){
+     
+    if((parseInt($scope.Payment.Payable_amount) == parseInt($scope.Payment.TotalAmount)) || (parseInt($scope.Payment.Payable_amount) > parseInt($scope.Payment.TotalAmount)))
+    {
+      $scope.Payment.PaymentStatus = "2";
+    }
+  else if (parseInt($scope.Payment.Payable_amount) < parseInt($scope.Payment.TotalAmount)) {
+    $scope.Payment.PaymentStatus = "1";
+  }
+  else {
+    return;
+  }
+
+  };
+  $scope.SetPartialPaymentStatus = function(){
+
+    $scope.PartialMakePayment.Discount="";
+    if((parseInt($scope.PartialMakePayment.BalanceAmount) == parseInt($scope.PartialMakePayment.DueAmount)) || (parseInt($scope.PartialMakePayment.DueAmount) > parseInt($scope.PartialMakePayment.BalanceAmount)))
+    {
+      $scope.PartialMakePayment.PaymentStatus = "2";
+    }
+  else if (parseInt($scope.PartialMakePayment.DueAmount) < parseInt($scope.PartialMakePayment.BalanceAmount)) {
+    $scope.PartialMakePayment.PaymentStatus = "1";
+  }
+  else {
+    return;
+  }
+
+  };
+
+  $scope.SetDiscount = function(){
+      $scope.discount=false;
+    console.log($scope.Payment.PaymentStatus);
+    if($scope.Payment.PaymentStatus == "2")
+    {console.log("inside");
+      if (parseInt($scope.Payment.Payable_amount) < parseInt($scope.Payment.TotalAmount))
+      {
+        $scope.discount=true;
+        $scope.Payment.Discount = parseInt($scope.Payment.TotalAmount)-parseInt($scope.Payment.Payable_amount);
+      }
+    }
+  };
+
+  $scope.SetPartialDiscount = function(){
+    $scope.Partialdiscount=false;
+    if($scope.PartialMakePayment.PaymentStatus == "2")
+    {
+      if (parseInt($scope.PartialMakePayment.DueAmount) < parseInt($scope.PartialMakePayment.BalanceAmount))
+      {
+        $scope.Partialdiscount=true;
+        $scope.PartialMakePayment.Discount = parseInt($scope.PartialMakePayment.BalanceAmount)-parseInt($scope.PartialMakePayment.DueAmount);
+      }
+    }
+  };
+
+// Payment Modal Popup
+  $scope.PaymentModal = function(row){
+    console.log(row);
+    $scope.Payment = row.entity;
+    $scope.Payment.PaymentStatus = "2";
+
+    $('#ModalPayment').modal('show');
+  };
+      
+//End of  Payment Modal Popup
+    
+  $scope.PartialPaymentModal = function(row)
+  {
+    console.log(row.entity);
+
+    $scope.PartialMakePayment = row.entity;
+    $scope.PartialMakePayment.DueAmount = $scope.PartialMakePayment.BalanceAmount;
+    $scope.PartialMakePayment.PaymentStatus = "2";
+    $scope.PartialMakePayment.PaymentType = "0";
+    $('#ModalPartialPayment').modal('show');
+  };
+
+//$scope.EditPendingOrder = {};
+// Edit Order Popup
+  $scope.OrderDetailsModal = function(row)
+  {
+    console.log(row)
+    $scope.Details= {};
+    var obj = {};
+    $scope.pendingProducts ={};
+    angular.extend($scope.Details, row.entity);
+    
+    var result = $filter('filter')($scope.Pending_products_data, {InvoiceId: $scope.Details.InvoiceId})[0];
+    obj["pendingProducts"] = result;
+      console.log(obj);
+   // console.log($scope.pendingProducts)
+   // console.log($scope.Pending_products_data);
+    console.log($scope.Details);
+      
+    sessionStorage.setItem("InvoiceDetails",JSON.stringify($scope.Details));
+    location.href = "/editInvoice";
+    //$('#ModalOrderDetails').modal('show');
+  };
+// End of Edit Order Popup
+      
+  $scope.PartialDetailsModal = function(row)
+  {
+    
+    console.log(row)
+    $scope.Details= {};
+    var obj = {};
+    $scope.PartialProducts ={};
+    angular.extend($scope.Details, row.entity);
+    
+    var result = $filter('filter')($scope.partial_products_data, {InvoiceId: $scope.Details.InvoiceId})[0];
+    obj["partialProducts"] = result;
+      console.log(obj);
+   // console.log($scope.pendingProducts)
+   // console.log($scope.Pending_products_data);
+    console.log($scope.Details);
+      
+    sessionStorage.setItem("InvoiceDetails",JSON.stringify($scope.Details));
+    location.href = "/editInvoice";
+      
+
+  };
+  $scope.CompletedDetailsModal = function(row)
+  {
+    $scope.CompletedDetails = "";
+    $scope.CompletedDetails = row.entity;
+    $('#ModalCompletedOrderDetails').modal('show');
+  };
+
+
+  $scope.MakePayment = function()
+  {
+    $('#PendingValidationMSG').html('');
+      console.log($scope.Payment)
+    if($scope.Payment!=undefined)
+    {
+      $http.post('/payment/ValidatePendingPayment',$scope.Payment).success(function(response){
+        console.log(response);
+        if(response)
+        {
+          $('#PendingValidationDIV').show(1000).delay(2000).hide(1000);
+          $('#PendingValidationMSG').html(response[0].msg);
+        }
+        else
+        {
+
+          $scope.Payment.BalanceAmount = parseInt($scope.Payment.TotalAmount)-parseInt($scope.Payment.Payable_amount);
+            console.log($scope.Payment.BalanceAmount);
+          var dateTime = new Date().toISOString();
+          var SplittedDate = dateTime.split("T");
+          var CurrentDate = SplittedDate[0];
+
+          var Data = {'OrderId':$scope.Payment.InvoiceId,'PaidAmount':$scope.Payment.Payable_amount,
+ 'PaymentType':$scope.Payment.PaymentType,'NeftTxnNo':$scope.Payment.NeftTxnNo,'CardTxnNo':$scope.Payment.CardTxnNo,'PaymentStatus':$scope.Payment.PaymentStatus,
+        'Discount':$scope.Payment.Discount,'BalanceAmount':$scope.Payment.BalanceAmount,'PaidDate':CurrentDate};
+
+          $http.post('/payment/MakePayment',Data).success(function(data){
+            console.log(data);
+            if(data!="" && data!=null)
+            {
+              $('#ModalPayment').modal('hide');
+              $scope.Payment="";
+              $scope.GetPaymentdata();
+              $('#PendingPaymentSuccess').show(1000).delay(2000).hide(1000);;
+              $('#PendingPaymentSuccessMessage').html("Payment Updated Successfully.");
+            }
+          });
+        }
+
+      });
+
+    }
+    else {
+
+      $('#PendingValidationDIV').show(1000).delay(2000).hide(1000);;
+      $('#PendingValidationMSG').html("Payment data is not defined.");
+    }
+
+  };
+
+  $scope.MakePartialPayment = function()
+  {
+    if($scope.PartialMakePayment!=undefined)
+    {
+      $http.post('/payment/ValidatePartialPayment',$scope.PartialMakePayment).success(function(response){
+        if(response)
+        {
+
+          $('#PartialPaymentValidation1').show(1000).delay(2000).hide(1000);;
+          $('#PartialPaymentError1').html(response[0].msg);
+          // alert(response[0].msg);
+        }
+        else {
+
+           $scope.PartialMakePayment.FinalBalanceAmount = parseInt($scope.PartialMakePayment.BalanceAmount)-parseInt($scope.PartialMakePayment.DueAmount);
+          $scope.PartialMakePayment.TotalPaid = parseInt($scope.PartialMakePayment.Payable_amount)+parseInt($scope.PartialMakePayment.DueAmount);
+
+          var dateTime = new Date().toISOString();
+          var SplittedDate = dateTime.split("T");
+          var CurrentDate = SplittedDate[0];
+
+          var Data = {'OrderId':$scope.PartialMakePayment.InvoiceId,'PaidAmount':$scope.PartialMakePayment.TotalPaid,
+        'PaymentType':$scope.PartialMakePayment.PaymentType,'NeftTxnNo':$scope.PartialMakePayment.NeftTxnNo,'CardTxnNo':$scope.PartialMakePayment.CardTxnNo,'PaymentStatus':$scope.PartialMakePayment.PaymentStatus,
+        'Discount':$scope.PartialMakePayment.Discount,'BalanceAmount':$scope.PartialMakePayment.FinalBalanceAmount,'PaidDate':CurrentDate};
+
+                    $http.post('/payment/MakePayment',Data).success(function(data){
+                    if(data!="" && data!=null)
+                    {
+                    $('#ModalPartialPayment').modal('hide');
+                    $scope.Payment="";
+                    $scope.GetPaymentdata();
+                    $('#PartialPaymentSuccess').show(1000).delay(2000).hide(1000);;
+                    $('#PartialPaymentSuccessMessage').html("Payment Updated Successfully.");
+
+                    }
+                    });
+        }
+
+      });
+    }
+    else {
+      alert("Payment data is not defined.");
+    }
+
+  };
+
+
+$scope.EditCakeOrder = function(){
+
+  var Data = {"Id":$scope.Details.CakeOrderId,"CakeName":$scope.Details.CakeName,"Quantity":$scope.Details.Quantity,"Size":$scope.Details.Size,"Shape":$scope.Details.Shape,"Type":$scope.Details.Type,
+"Amount":$scope.Details.Amount,"Occasion":$scope.Details.Occasion,"Message":$scope.Details.Message,"DecorationInstr":$scope.Details.DecorationInstr,"IngredientInstr":$scope.Details.IngredientInstr};
+
+$http.post('/order/ValidateCakeOrder',Data).success(function(response){
+  console.log(response);
+  if(response)
+  {
+    $('#PendingEditOrderValidation').show(1000).delay(2000).hide(1000);
+    $('#PendingEditOrderError').html(response[0].msg);
+  }
+  else {
+
+    $http.post('/order/EditCakeOrder',Data).success(function(response){
+      if(response)
+      {
+        $('#ModalOrderDetails').modal('hide');
+        $scope.GetPaymentdata();
+        $('#PendingPaymentSuccess').show(1000).delay(2000).hide(1000);;
+        $('#PendingPaymentSuccessMessage').html("Order details updated successfully.");
+      }
+      else {
+        alert("ERROR");
+      }
+    });
+  }
+});
+
+
+};
+
+$scope.EditPartialCakeOrder = function(){
+
+  var Data = {"Id":$scope.PartialDetails.CakeOrderId,"CakeName":$scope.PartialDetails.CakeName,"Quantity":$scope.PartialDetails.Quantity,"Size":$scope.PartialDetails.Size,"Shape":$scope.PartialDetails.Shape,"Type":$scope.PartialDetails.Type,
+"Amount":$scope.PartialDetails.Amount,"Occasion":$scope.PartialDetails.Occasion,"Message":$scope.PartialDetails.Message,"DecorationInstr":$scope.PartialDetails.DecorationInstr,"IngredientInstr":$scope.PartialDetails.IngredientInstr};
+
+$http.post('/order/ValidateCakeOrder',Data).success(function(response){
+  console.log(response);
+  if(response)
+  {
+    $('#PartialEditOrderValidation').show(1000).delay(2000).hide(1000);
+    $('#PartialEditOrderError').html(response[0].msg);
+  }
+  else {
+
+      $http.post('/order/EditCakeOrder',Data).success(function(response){
+        if(response)
+        {
+
+          $('#ModalPartialOrderDetails').modal('hide');
+          $scope.GetPaymentdata();
+          $('#PartialPaymentSuccess').show(1000).delay(2000).hide(1000);;
+          $('#PartialPaymentSuccessMessage').html("Order details updated successfully.");
+        }
+      });
+  }
+});
+
+};
+$scope.EditCompletedCakeOrder = function(){
+
+  var Data = {"Id":$scope.CompletedDetails.CakeOrderId,"CakeName":$scope.CompletedDetails.CakeName,"Quantity":$scope.CompletedDetails.Quantity,"Size":$scope.CompletedDetails.Size,"Shape":$scope.CompletedDetails.Shape,"Type":$scope.CompletedDetails.Type,
+"Amount":$scope.CompletedDetails.Amount,"Occasion":$scope.CompletedDetails.Occasion,"Message":$scope.CompletedDetails.Message,"DecorationInstr":$scope.CompletedDetails.DecorationInstr,"IngredientInstr":$scope.CompletedDetails.IngredientInstr};
+
+$http.post('/order/ValidateCakeOrder',Data).success(function(response){
+  console.log(response);
+  if(response)
+  {
+    $('#PartialEditOrderValidation').show(1000).delay(2000).hide(1000);
+    $('#PartialEditOrderError').html(response[0].msg);
+  }
+  else {
+    $http.post('/order/EditCakeOrder',Data).success(function(response){
+      if(response)
+      {
+        $('#ModalCompletedOrderDetails').modal('hide');
+        $scope.GetPaymentdata();
+        $('#CompletedPaymentSuccess').show(1000).delay(2000).hide(1000);;
+        $('#CompletedPaymentSuccessMessage').html("Order details updated successfully.");
+      }
+    });
+  }
+});
+
+};
+
+$scope.CancelPendingOrderModal = function(row){
+
+  $scope.CancelOrderPending = "";
+  $scope.CancelPendingOrderData= "";
+  $scope.CancelPendingOrderData = row.entity;
+  $('#CancelPendingOrder').modal('show');
+
+};
+
+$scope.CancelPendingOrder = function(){
+  console.log($scope.CancelOrderPending);
+  if($scope.CancelOrderPending.CancelReason!=undefined)
+  {
+    if($scope.CancelOrderPending.CancelReason!="" && $scope.CancelOrderPending.CancelReason!=null)
+    {
+      $loading.start('CancelOrderSpinner');
+
+      $scope.CancelOrderPending.OrderId = $scope.CancelPendingOrderData.InvoiceId;
+      $scope.CancelOrderPending.PaymentStatus = 3;
+
+      var dateTime = new Date().toISOString();
+      var SplittedDate = dateTime.split("T");
+      $scope.CancelOrderPending.CancelledDate = SplittedDate[0];
+
+
+      $http.post('/order/api/CancelPendingOrder',$scope.CancelOrderPending).success(function(response){
+        console.log(response);
+        if(response)
+        {
+          $loading.finish('CancelOrderSpinner');
+
+          $('#CancelPendingOrder').modal('hide');
+          $scope.GetPaymentdata();
+          $('#PendingPaymentSuccess').show(1000).delay(2000).hide(1000);;
+          $('#PendingPaymentSuccessMessage').html("Order Cancelled Successfully.");
+        }
+      });
+
+    }
+    else {
+      $('#CancelPendingValidation').show(1000).delay(2000).hide(1000);;
+      $('#CancelPendingError').html("Cancel Reasons is required");
+    }
+  }
+  else {
+    $('#CancelPendingValidation').show(1000).delay(2000).hide(1000);;
+    $('#CancelPendingError').html("Cancel Reason is required");
+  }
+
+
+};
+
+
+
+  });
+
+
+
+</script>
+
+
+
+</body>
+
+
+
+
+
+</html>

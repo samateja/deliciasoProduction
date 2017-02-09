@@ -1,0 +1,232 @@
+  <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up </title>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+            <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="fonts/css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/animate.min.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="http://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.css" /> -->
+  <!-- Custom styling plus plugins -->
+  <link href="css/custom.css" rel="stylesheet">
+  <link href="css/icheck/flat/green.css" rel="stylesheet" />
+  <link href="css/floatexamples.css" rel="stylesheet" type="text/css" />
+
+  <link rel="stylesheet" type="text/css" href="angular-ui-grid/ui-grid.min.css"></script>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="angular/angular.min.js"></script>
+  <script src="angular-ui-grid/ui-grid.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-touch.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+    </head>
+    <style>
+      *, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  color: #384047;
+}
+
+form {
+  max-width: 300px;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background: #f4f7f8;
+  border-radius: 8px;
+}
+
+h1 {
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+textarea,
+select {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  font-size: 16px;
+  height: auto;
+  margin: 0;
+  outline: 0;
+  padding: 15px;
+  width: 100%;
+  background-color: #e8eeef;
+  color: #8a97a0;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+  margin-bottom: 30px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin: 0 4px 8px 0;
+}
+
+select {
+  padding: 6px;
+  height: 32px;
+  border-radius: 2px;
+}
+
+button {
+  padding: 19px 39px 18px 39px;
+  color: #FFF;
+  background-color: #4bc970;
+  font-size: 18px;
+  text-align: center;
+  font-style: normal;
+  border-radius: 5px;
+  width: 100%;
+  border: 1px solid #3ac162;
+  border-width: 1px 1px 3px;
+  box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
+  margin-bottom: 10px;
+}
+
+fieldset {
+  margin-bottom: 30px;
+  border: none;
+}
+
+legend {
+  font-size: 1.4em;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+label.light {
+  font-weight: 300;
+  display: inline;
+}
+
+.number {
+  background-color: #5fcf80;
+  color: #fff;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  font-size: 0.8em;
+  margin-right: 4px;
+  line-height: 30px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+  border-radius: 100%;
+}
+
+@media screen and (min-width: 480px) {
+
+  form {
+    max-width: 480px;
+  }
+
+}
+</style>
+    <!-- <body ng-app="myApp" ng-controller="regCtrl"> -->
+    <body>
+<!--
+      <form  name="regForm" enctype="multipart/form-data" >
+
+        <h1>Sign Up</h1>
+            <label for="phone">Mobile:</label >
+          <input type="text" id="user_mobile" maxlength="10"  pattern="[0-9]{10}" name="user_mobile" ng-model="register.user_mobile" required>
+          <div>
+                <input type="file" class="form-control" id="uploadFile" placeholder="Logo" required=""  />
+              </div>
+
+          </fieldset>
+         <button type="submit"" ng-click="upload()">Sign Up</button>
+      </form>-->
+
+
+      <form enctype="multipart/form-data" id="uploadForm" role="form" method="post" action="/uploadImage">
+<input id="file-upload" type="file" name="file" />
+<input type="text" name="fname" ></input>
+<input type="submit" value="Import" name="submit" class="btn btn-success">
+</form>
+
+
+<script>
+$(document).ready(function() {
+function validate(){
+  alert("val");
+  return true;
+}
+
+$('#uploadForm').submit(function() {
+$(this).ajaxSubmit({ beforeSubmit: validate,
+
+error: function(xhr) {
+status('Error: ' + xhr);
+},
+success: function(response) {
+console.log(response);
+}
+});
+return false;
+});
+});
+</script>
+
+    </body>
+    <!-- <script>
+var app = angular.module('myApp', []);
+app.controller('regCtrl', function($scope,$http,$timeout) {
+   $scope.upload=function(){
+ var formData = new FormData();
+formData.append('section', 'general');
+formData.append('action', 'previewImg');
+// Main magic with files here
+formData.append('image', $('input[type=file]')[0].files[0]);
+    $http.post('/upload',formData).success(function(response){
+          console.log(response);
+       }).error(function(data, status) {
+         alert("Error while communicating server. Please try again.")
+        console.error('Repos error', status, data);
+      });
+    }
+
+//   $scope.register={};
+//   $scope.register.isHaveFSSAI=false;
+//   $scope.reg=function(isValid){
+//  //   alert(isValid);
+
+//      $http.post('/CheckDuplicate',$scope.register).success(function(response){
+//         console.log(response);
+//        }).error(function(data, status) {
+//          alert("Error while communicating server. Please try again.")
+//         console.error('Repos error', status, data);
+//       });
+//     return false;
+//        $http.post('/Register',$scope.register).success(function(response){
+//           window.location.href="/Dashboard";
+//        }).error(function(data, status) {
+//          alert("Error while communicating server. Please try again.")
+//         console.error('Repos error', status, data);
+//       });
+//   }
+
+});
+
+      </script> -->
+</html>

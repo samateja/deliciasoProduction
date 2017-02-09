@@ -1,0 +1,52 @@
+<script>
+var PastOrder = angular.module('app1', []);
+
+PastOrder.controller('PastOrderCtrl', ['$rootScope','$scope', '$http', function ($rootScope,$scope, $http) {
+
+console.log("came here");
+$scope.GetPastOrderDetails = function(){
+  $http.get('/api/GetPastOrderDetails/'+$scope.PastOrder.Mobile).success(function(response){
+    if(response)
+    {
+      $rootScope.CommonPendingPayment = response.Pending;
+      console.log($scope.CommonPendingPayment);
+      $scope.CommonPartialPayment = response.Partial;
+      $('#CommonPendingModal').modal('show');
+      $rootScope.PastPendingOrders = {
+          data: $scope.CommonPendingPayment,
+          paginationPageSizes: [15, 30, 45],
+          paginationPageSize: 15,
+           enableColumnResizing: true,
+           enableFiltering: true,
+           enableGridMenu: true,
+           showColumnFooter: true,
+           enableHorizontalScrollbar: 1,
+           enableSorting: true,
+           rowHeight:45.82,
+           enableRowHeaderSelection: true,
+          columnDefs: [{field:'Name', displayName:'Name',width:100},
+      {field:'Mobile', displayName:'Mobile',width:100},
+      {field:'Email', displayName:'Email',width:100},
+      {field:'CakeName', displayName:'Cake Flavour',width:100},
+      {field:'DeliveryType', displayName:'Delivery Type',width:100},
+      {field:'Amount', displayName:'Amount',width:100}
+      ]
+
+      };
+      console.log($rootScope.PastPendingOrders);
+    }
+
+
+  });
+};
+
+
+
+console.log($rootScope.PastPendingOrders);
+
+}]);
+
+angular.element(document).ready(function() {
+               angular.bootstrap(document.getElementById("SecondCtrl"), ['app']);
+         });
+</script>

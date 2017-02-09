@@ -1,0 +1,157 @@
+
+<style>
+    .note-insert
+          {
+            display: none
+       }
+  </style>
+      <!-- page content -->
+      <div class="right_col" role="main" style="height:900px !important;" ng-app="myApp" id="SecondCtrl" ng-controller="myCtrl" ng-init="init()">
+
+        <br /><br />
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+
+
+  <div class="alert alert-success"  id="emailSuccess" style="display:none;text-align:center;">
+  <strong id="emailSuccessMessage"></strong>
+  </div>
+  <div class="alert alert-danger"  id="emailError" style="display:none;text-align:center;">
+  <strong id="emailErrorMessage"></strong>
+  </div>
+
+
+          <div class="x_panel">
+            <div class="x_title">
+              <h2><i class="fa fa-envelope"></i> Promotional Email</h2>
+              <button type="button" class="btn btn-success" style="float:right;" ><img src="images/mailchimp.png" style="
+    width: 30px;
+    height: 25px;
+"> Mail chimp</button>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+             <form class="form-horizontal form-label-left" >
+                  <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-1 col-sm-1 col-xs-1">Recipients</label>
+                        <div class="col-md-11 col-sm-11 col-xs-11">
+                        <multiple-autocomplete ng-model="email.selectedCustomers"
+                            object-property="Email"
+                             suggestions-arr="customers">
+                        </multiple-autocomplete>
+                        </div>
+                      </div>
+                       <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-1 col-sm-1 col-xs-1">Tags</label>
+                        <div class="col-md-11 col-sm-11 col-xs-11">
+                        <multiple-autocomplete ng-model="email.selectedTags"
+                             object-property="TagName"
+                              after-select-item="afterSelectItem"
+                               suggestions-arr="tags">
+                        </multiple-autocomplete>
+                        </div>
+                      </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-1 col-sm-1 col-xs-1" for="first-name">Subject<span class="required">*</span>
+                        </label>
+                        <div class="col-md-11 col-sm-11 col-xs-12">
+                          <input type="text" id="first-name" class="form-control col-md-7 col-xs-12" ng-model="email.subject">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-1 col-sm-1 col-xs-1" for="first-name">
+                        </label>
+                        <div class="col-md-11 col-sm-11 col-xs-12">
+                        <div id="emailBody"></div>
+                              </div>
+                      </div>
+                      
+            <button type="button" class="btn btn-success" style="float:right" ng-click="SendEmail()">Send </button>
+                         
+            </form>
+            </div>
+          </div>
+        </div>
+
+
+</body>
+</html>
+
+
+    <script>
+        $(document).ready(function() {
+      
+         $('#emailBody').summernote({
+  height: 300,                 // set editor height
+  minHeight: null,             // set minimum height of editor
+  maxHeight: null,             // set maximum height of editor
+  focus: true                  // set focus to editable area after initializing summernote
+});
+        });
+          var app = angular.module('myApp', ['ui.grid','multipleSelect','ui.grid.pinning','ui.grid.pagination','ui.grid.resizeColumns','ui.grid.selection','ui.grid.autoResize','ui.grid.exporter']);
+
+app.controller('myCtrl', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants','$filter', function ($scope, $http, $log, $timeout, $uiGridConstants,$filter) {
+$scope.email={};
+//get tags and customers
+function GetTagsAndCustomers(){
+        $http.get('/customers/GetTags').success(function(response){
+            $scope.tags  = response;
+        });
+        $http.get('/customers/GetCustomerData/api').success(function(response){
+          $scope.customers = response;
+        });
+    }
+GetTagsAndCustomers();
+$scope.afterSelectItem = function(item){
+   $http.get('/customers/GetTaggedCustomers/' + $scope.email.selectedTags[$scope.email.selectedTags.length-1].Id).success(function(response){
+   for(var i=0;i<response.customers.length;i++){
+      var found = $filter('filter')($scope.email.selectedCustomers, {Id:response.customers[i].CustomerId }, true);
+     if(found.length==0){
+        var cust = $filter('filter')($scope.customers, {Id:response.customers[i].CustomerId }, true);
+        if(cust.length>0)
+          $scope.email.selectedCustomers.push(cust[0]);
+     }
+   }
+ 
+   });
+}
+$scope.SendEmail = function(){
+    $scope.email.recipients=[];
+  if($scope.email.selectedCustomers.length>0)
+  {
+    for(var i=0;i<$scope.email.selectedCustomers.length;i++)
+        $scope.email.recipients.push($scope.email.selectedCustomers[i].Email);
+  }
+  else{
+          $('#emailError').show(1000).delay(2000).hide(1000);;
+        $('#emailErrorMessage').html("Please select at least one recipient.");
+        return;
+  }
+  console.log( $scope.email.recipients);
+ var html='<!DOCTYPE html><html><head>'+
+ +' <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">'+
+  +'</head><body>'+$('#emailBody').summernote('code')+' </body></html>';
+ 
+ html = html.replace(/NaNNaN/g, "");
+    $scope.email.body = html;
+   $http.post('/customers/SendPromotionalEmail',$scope.email).success(function(response){
+console.log(response);
+if(response.flag){
+       $scope.email.selectedCustomers=[];
+       $scope.email.selectedTags=[];
+       $('#emailSuccess').show(1000).delay(2000).hide(1000);;
+        $('#emailSuccessMessage').html("Promotional Email successfully sent. ");
+       $('#summernote').summernote('code', "");
+       }else{
+        $('#emailError').show(1000).delay(2000).hide(1000);;
+        $('#emailErrorMessage').html("Not able to send Promotional Email.Please contact administrator.");
+     }     
+   }) .error(function (error, status){
+        console.log({ message: error, status: status}); 
+           $('#emailError').show(1000).delay(2000).hide(1000);;
+        $('#emailErrorMessage').html("Not able to send Promotional Email.Please contact administrator.");
+  }); 
+}
+
+}])
+</script>

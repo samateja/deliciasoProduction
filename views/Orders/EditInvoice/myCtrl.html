@@ -1,0 +1,670 @@
+<script>
+var app = angular.module('myApp', ['ui.grid','multipleSelect', 'ui.grid.edit','ui.grid.pinning','ui.grid.cellNav','ngMaterial','ngMaterialDatePicker']);
+app.controller('myCtrl',function($scope,$http,$timeout, $q, $log,$compile) {
+console.log("came here")
+localStorage.setItem('ReferedBy', "");
+$scope.customer = {};
+$scope.Category = "0";
+$scope.Prev_OrderId = {};
+$scope.invoiceProducts = JSON.parse(sessionStorage.getItem("InvoiceDetails"));
+console.log($scope.invoiceProducts);
+$scope.EditProducts= {};
+$scope.org_address = {};
+//$scope.desiredLocation = myService.get();
+//console.log( myService.get())
+  
+if ($scope.invoiceProducts.length != 0){
+       
+  //$scope.search = function($scope.invoiceProducts.Mobile){
+      console.log($scope.invoiceProducts.InvoiceId)
+      $scope.InvoiceOrderId = $scope.invoiceProducts.InvoiceId
+    var mobile = $scope.invoiceProducts.Mobile;
+    $http.get('/customers/GetCustomer/' + mobile).success(function(response){
+       // console.log(response)
+      if(response !=null && response!="" && response.hasOwnProperty("Customer") )
+      {
+        $scope.Referel = false;
+        $scope.customer = response["Customer"][0];
+        $scope.org_address = response["Org_address"][0];
+        $scope.DeliveryAddress = response["DeliveryAddress"];
+        $scope.Prev_OrderId = response["Prev_OrderId"][0];
+        $scope.cakeorders = response["LastCakeOrders"];
+        $scope.ProductCategory = response["ProductCategory"];
+        $scope.customer.selectedTags=[];
+        
+        var selectTags= response["tags"]==undefined ?[]:response["tags"];
+        for(var i=0;i<selectTags.length;i++){
+          for(var j=0;j<$scope.tags.length;j++){
+            if($scope.tags[j].Id==selectTags[i].TagId)
+             $scope.customer.selectedTags.push($scope.tags[j]);
+          }
+        }
+        console.log($scope.customer.selectedTags);
+      }
+      else
+      {
+        $scope.Referel = true;
+        $scope.customer.Name ="";
+        $scope.customer.Gender ="";
+        $scope.customer.Email ="";
+        $scope.customer.Address ="";
+        $scope.customer.Zip ="";
+        $scope.customer.Id ="";
+
+		$scope.ProductCategory = response["ProductCategory"];
+        console.log("No data available with this mobile number.")
+      }
+
+  });
+    
+var edit_OrderData;
+$scope.ShowCart =[];
+$scope.productData = [];
+var cart_data;    
+var cake_details = new Array;  
+    
+     $http.post('/order/GetInvoiceData',$scope.invoiceProducts).success(function(response){
+         edit_OrderData= new Array();
+         $scope.InvoiceOrders = response.InvoiceData;
+    
+         for (var i=0;i<response.InvoiceData.length;i++){
+             
+             edit_OrderData[i] = $scope.InvoiceOrders[i].Product_id;
+             //console.log(edit_OrderData)
+             $scope.ShowCart.push({"Product_id":$scope.InvoiceOrders[i].Product_id,product_fields_json:JSON.stringify($scope.InvoiceOrders[i].product_fields_json),"ProductName":$scope.InvoiceOrders[i].ProductName,"AMOUNT":$scope.InvoiceOrders[i].AMOUNT});
+             $scope.productData.push({"Product_id":$scope.InvoiceOrders[i].Product_id,product_fields_json:JSON.stringify($scope.InvoiceOrders[i].product_fields_json),"ProductName":$scope.InvoiceOrders[i].ProductName,"AMOUNT":$scope.InvoiceOrders[i].AMOUNT});
+         }
+
+     });
+
+
+
+
+Array.prototype.contains = function(element){
+    return this.indexOf(element) > -1;
+};
+
+    
+function check_element(array){
+var found = false;
+for (var i = 0; i < array.length; i++) {
+    if (edit_OrderData.indexOf(array[i]) > -1) {
+        found = true;
+        break;
+    }
+}
+return found;
+}
+
+
+var j =0;
+    
+// Add Product to Cart
+$scope.SaveCakeOrder = function(){
+
+    
+  var originalFormData = $('#hidden_json').data('key');
+
+  var fbRender = document.getElementById('edit-content');
+ 
+  var formRenderOpts = {
+    formData: JSON.stringify(originalFormData),
+    dataType: 'json'
+  };
+    var formData = new FormData(fbRender);
+
+    function getObj(objs, key, val) {
+      val = val.replace('[]', '');
+      return objs.filter(function(obj) {
+        var filter = false;
+        if (val) {
+          filter = (obj[key] === val);
+        } else if (obj[key]) {
+          filter = true;
+        }
+        return filter;
+      });
+    }
+
+    function setValue(name, value) {
+      field = getObj(originalFormData, 'name', name)[0];
+      
+      if (!field) {
+        return;
+      }
+
+      if (['select', 'checkbox-group', 'radio-group'].indexOf(field.type) !== -1) {
+        for (var fieldOption of field.values) {
+          if (value.indexOf(fieldOption.value) !== -1) {
+            fieldOption.selected = true;
+          } else {
+            delete fieldOption.selected;
+          };
+        }
+      } else {
+        field.value = value[0];
+      }
+    }
+
+    //console.log('Original formData: ', originalFormData);
+
+    for (var key of formData.keys()) {
+      setValue(key, formData.getAll(key));
+    }
+		//console.log(originalFormData)
+    //console.log('Updated formData: ', originalFormData);
+    
+    //console.log(originalFormData[0]["required"])
+    var product_name = $("#modal-header-desc").html();
+    var prdouct_id = $('#hidden_product_id').val();
+    var p_id = parseInt(prdouct_id);
+    var product_amount;
+        console.log("help")
+        console.log($scope.productData)
+     
+     for (var i=0;i<originalFormData.length;i++){
+
+        if (originalFormData[i]["name"] == "amount"){
+
+            product_amount = originalFormData[i]["value"];
+            var p_data ={
+                "Product_id":parseInt(prdouct_id),
+                "Product_amount":product_amount,
+                "product_name":product_name,
+                product_fields_json:JSON.stringify(originalFormData)
+            };
+            //console.log($scope.InvoiceOrders);
+            
+        }
+         
+        if (originalFormData[i]["required"] == true){
+                if (originalFormData[i]["value"] == ''){    
+                  $("#error_message").html("All Fields are Mandatory!");
+                    return false;
+                }
+        }else{ 
+            console.log(check_element(cake_details));
+            console.log("cake value "+cake_details)
+
+                cake_details.push(p_id); 
+                $('#cake_form').modal('toggle');
+                var cart_data = {"prdouct_id":parseInt(prdouct_id),product_fields_json:originalFormData,"product_name":product_name};
+
+                    var found = true;
+                    angular.forEach($scope.InvoiceOrders,function(value, key) {
+                    if (found){
+                        if (value.Product_id == p_id){
+                            value.AMOUNT = product_amount;
+                            value.product_fields_json = JSON.stringify(originalFormData);
+                            found = false;
+                        }
+                      }
+                    },{});
+                    
+                if (found == true){
+                    var product_data = {"Product_id":p_id,"AMOUNT":product_amount,"ProductName":product_name,"product_fields_json":JSON.stringify(originalFormData)};
+                    $scope.InvoiceOrders.push(product_data);
+                    $scope.productData.push(product_data);
+                    $scope.ShowCart.push(product_data); 
+                } 
+                else{
+                     //$scope.productData = [];
+                    $scope.productData =$scope.InvoiceOrders;
+                        
+                    }
+                console.log("Incoice")
+                console.log($scope.InvoiceOrders)
+                console.log("Products data")
+                console.log($scope.productData)
+                    
+                //console.log($scope.InvoiceOrders)
+               
+              //  }
+                
+          //  }
+        }
+
+    }
+    
+   // console.log($scope);
+    console.log("*** Cake Order Details ****")
+    console.log(cake_details)
+    console.log($scope.ShowCart);
+    console.log($scope.productData);
+    console.log("*** End Of Cake Order Details ****")
+
+}
+
+// Start of remove Cart
+$scope.removeCart = function(value) {
+        $scope.val = value;
+    var remove_product_item = cake_details.indexOf(value); 
+        if (remove_product_item >= 0) {
+          cake_details.splice( remove_product_item, 1 );
+        }
+    
+    for (var i=0; i<$scope.ShowCart.length;i++){
+        if ($scope.ShowCart[i].prdouct_id == value ){
+            delete $scope.ShowCart[i];
+        }
+    }
+    for (var j=0; j<$scope.ShowCart.length;j++){
+        if ($scope.productData[j].Product_id == value ){
+            delete $scope.productData[j];
+        }
+    }
+        console.log(cake_details)
+        console.log($scope.ShowCart);
+        console.log($scope.productData);
+};  
+
+// End of remove Cart    
+    
+
+// Set Delivery Details
+    
+  //$scope.billing.DeliveryType = $scope.invoiceProducts.DeliveryType;$scope.invoiceProducts.InvoiceId
+  // Set Invoice ID
+     $scope.Prev_OrderId.OrderId = $scope.invoiceProducts.InvoiceId;
+    
+ // End of Invoice ID
+     
+// Set Billing Amount
+    
+      for (var i=0;i<($scope.productData).length;i++)
+      {
+          var product_amount = parseFloat($scope.productData[i].AMOUNT);
+        $scope.billing.Amount = $scope.billing.Amount+product_amount;
+      }
+// End of billing Amount
+     
+        if($scope.invoiceProducts.DeliveryType == "DoorDelivery")
+        {
+          //$scope.billing.PickUpDateTime="";
+        $scope.Door = true;
+        $scope.InvoiceDelivery =true;
+        $scope.Pick = false;
+        $scope.InvoicePickUp= false;
+           //$scope.DeliveryAddress = $scope.DeliveryAddress.DeliveryAddress;
+           $scope.DeliveryCharge = $scope.invoiceProducts.DeliveryCharge;
+              if($scope.DeliveryAddress =="" || $scope.DeliveryAddress==null)
+              {
+                $scope.ExistingDeliveryAddress = false;
+                $scope.NewDeliveryAddress = true;
+              }
+              else {
+                $scope.ExistingDeliveryAddress = true;
+                $scope.NewDeliveryAddress = false;
+              }
+        }
+        else
+        {
+        $scope.Pick = true;
+        $scope.InvoicePickUp =true;
+        $scope.Door = false;
+        $scope.InvoiceDelivery =false;
+        $scope.billing.DeliveryDateTime= $scope.DeliveryAddress.DeliveryDateTime ;
+        }
+// End Of Delivery Address
+    
+    
+// Delivery Address
+ $scope.GetRadioValue = function(){
+    
+// Set Invoice ID
+     $scope.Prev_OrderId.OrderId = $scope.invoiceProducts.InvoiceId;
+     
+     
+ // End of Invoice ID
+     
+// Set Billing Amount
+      $scope.billing.Amount =0;
+      for (var i=0;i<($scope.productData).length;i++)
+      {
+          var product_amount = parseFloat($scope.productData[i].AMOUNT);
+        $scope.billing.Amount = $scope.billing.Amount+product_amount;
+      }
+// End of billing Amount
+     
+        if($scope.billing.DeliveryType == "DoorDelivery")
+        {
+          $scope.billing.PickUpDateTime="";
+        $scope.Door = true;
+        $scope.InvoiceDelivery =true;
+        $scope.Pick = false;
+        $scope.InvoicePickUp= false;
+              if($scope.DeliveryAddress =="" || $scope.DeliveryAddress==null)
+              {
+                $scope.ExistingDeliveryAddress = false;
+                $scope.NewDeliveryAddress = true;
+              }
+              else {
+                $scope.ExistingDeliveryAddress = true;
+                $scope.NewDeliveryAddress = false;
+              }
+        }
+        else
+        {
+        $scope.Pick = true;
+        $scope.InvoicePickUp =true;
+        $scope.Door = false;
+        $scope.InvoiceDelivery =false;
+        $scope.billing.DeliveryDateTime="";
+        }
+};
+    
+
+// Quick Save Customer
+    
+$scope.QuickSave = function(){
+  $scope.customer.ReferedBy = localStorage.getItem('ReferedBy');
+ 
+    $http.post('/customers/ValidateQuickSave',$scope.customer).success(function(response){
+      console.log(response);
+      if(response)
+      {
+        $('#Step1Validation').show(1000).delay(2000).hide(1000);;
+        $('#Step1Error').html(response[0].msg);
+      }
+      else {
+        if($scope.customer.Mobile[0]=="9"||$scope.customer.Mobile[0]=="8"||$scope.customer.Mobile[0]=="7")
+        {
+                    $http.post('/QuickSave',$scope.customer).success(function(response){
+                      console.log(response);
+                    if(response)
+                    {
+                      if(response.Status == 1)
+                      {
+                        $('#QuickSaveSuccess').show(1000).delay(2000).hide(1000);;
+                        $('#QuickSaveSuccessMessage').html("Customer details updated successfully!");
+                      }
+                      else if (response.Status == 2) {
+                        $('#QuickSaveSuccess').show(1000).delay(2000).hide(1000);;
+                        $('#QuickSaveSuccessMessage').html("New customer created successfully!");
+                      }
+                    }
+                    else {
+                      $('#Step1Validation').show(1000).delay(2000).hide(1000);;
+                      $('#Step1Error').html("Not possible to do now! sorry for the inconvenience.");
+                    }
+                      });
+        }
+        else
+        {
+          $('#Step1Validation').show(1000).delay(2000).hide(1000);;
+          $('#Step1Error').html("Invalid mobile number.");
+        }
+      }
+    });
+};
+
+// Start of Placing Cake Order
+    
+$scope.PlaceOrder = function(){
+    console.log($scope.billing);
+    var now = new Date();
+    
+$scope.Prev_OrderId.OrderId =  $scope.invoiceProducts.InvoiceId;// Invoice ID
+
+    // delete $scope.billing.DeliveryDateTime;
+    //delete $scope.billing.PickUpDateTime;
+   // $scope.billing.PickUpDateTime = "2017-01-09T15:02:12+05:30";
+ $scope.billing.DeliveryAddressId = $scope.demoTest.SelectedDeliveryAddress;
+    // delete $scope.billing.DeliveryDateTime;
+
+  $scope.FinalAddress="";
+  $scope.ReferedByData = localStorage.getItem('ReferedBy');
+  if($scope.ReferedByData!=""&& $scope.ReferedByData!=null)
+  {
+    $scope.ReferedBy = JSON.parse($scope.ReferedByData);
+    if($scope.ReferedBy!="" && $scope.ReferedBy!=null)
+    {
+      $scope.customer.ReferedBy = $scope.ReferedBy.Id;
+    }
+  }
+  if($scope.billing.DeliveryType == "DoorDelivery")
+  {
+     
+      var SetTimeZone  = moment.tz($scope.billing.DeliveryDateTime, "Asia/kolkata");
+      $scope.billing.DeliveryDateTime = SetTimeZone.format();
+      $scope.billing.DeliveryDateTime = moment(new Date($scope.billing.DeliveryDateTime)).format("YYYY-MM-DD HH:mm:ss");
+      delete $scope.billing.PickUpDateTime; 
+       //delete $scope.billing.DeliveryDateTime;    
+    if(!$scope.demoTest.DeliveryAddress)
+    {
+    console.log("came to demoTest");
+        
+            var Data = {
+          "cust":$scope.customer,
+          "Cake":$scope.productData,
+          "Billing":$scope.billing,
+          "OrderId":$scope.invoiceProducts.InvoiceId,
+          "NewDeliveryAddress":$scope.demoTest.DeliveryAddress };
+        
+        console.log(Data)
+        
+       // return false;
+    }
+    else
+    {
+      console.log("came to else demoTest");
+      
+      var Data = {
+          "cust":$scope.customer,
+          "Cake":$scope.productData,
+          "Billing":$scope.billing,
+          "OrderId":$scope.invoiceProducts.InvoiceId,
+          "NewDeliveryAddress":$scope.demoTest.DeliveryAddress };
+        
+        console.log(Data)
+        //console.log($scope.productData)
+        //return false;
+    }
+  }
+  else
+   {
+       console.log("came to different else");
+     var SetTimeZone  = moment.tz($scope.billing.PickUpDateTime, "Asia/kolkata");
+     $scope.billing.PickUpDateTime = SetTimeZone.format();
+        $scope.billing.PickUpDateTime = moment(new Date($scope.billing.PickUpDateTime)).format("YYYY-MM-DD HH:mm:ss");
+       delete $scope.billing.DeliveryDateTime;
+       
+       var Data = {
+          "cust":$scope.customer,
+          "Cake":$scope.productData,
+          "Billing":$scope.billing,
+          "OrderId":$scope.invoiceProducts.InvoiceIdd,
+        };
+       
+        console.log(Data)
+        //console.log($scope.productData)
+        //return false;
+  }
+
+$http.post('/order/UpdateInvoiceOrder',Data).success(function(response){
+  if(response)
+  {
+      //console.log(response)
+      //return false;
+    $('#OrderSuccess').show(1000).delay(2000).hide(1000);;
+    $('#SuccessOrderMessage').html("Order Updated successfully!");
+        setTimeout(function(){
+        
+        location.href="/payment";
+      }, 4000);
+  }
+  else
+  {
+    $('#AlertSuccess').show(0).delay(4000).hide(1000);
+  }
+});
+};
+
+// End of Placing Cake Order
+    
+$scope.SetDeliveryAddress = function(){
+$scope.ExistingDeliveryAddress =false;
+$scope.NewDeliveryAddress = true;
+$scope.demoTest={};
+};
+    
+var self = this;
+self.simulateQuery = false;
+self.isDisabled    = false;
+self.repos         = [];
+self.querySearch   = querySearch;
+self.selectedItemChange = selectedItemChange;
+self.searchTextChange   = searchTextChange;
+self.selectedItemChange1 = selectedItemChange1;
+self.searchTextChange1   = searchTextChange1;
+self.selectedTagItemChange   = selectedTagItemChange;
+ $scope.customer.selectedTags=[];
+//get tags
+$http.get('/customers/GetTags').success(function(response){
+ $scope.tags  = response;
+});
+function querySearch (query) {
+var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
+   deferred;
+if (self.simulateQuery) {
+ deferred = $q.defer();
+ $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+ return deferred.promise;
+} else {
+ return results;
+}
+}
+$scope.SaveTag = function(){
+   $http.post('/customers/SaveTag',$scope.addTag).success(function(response){
+       var searchBox= $('input[ng-model="inputValue"]');
+       searchBox.val("");
+              $scope.tags.push({Id:response.data.id,TagName:response.data.tagName});
+              $scope.customer.selectedTags.push({Id:response.data.id,TagName:response.data.tagName});
+              $('#tagModal').modal('hide');
+    });
+}
+
+function searchTextChange(text) {
+$log.info('Text changed to ' + text);
+$http.get('/customers/GetReferedByData/' + text).success(function(response){
+ self.repos = response;
+console.log(response);
+});
+}
+    
+
+function selectedItemChange(item) {
+
+localStorage.setItem('ReferedBy', item.Id);
+}
+function selectedTagItemChange(item) {
+
+$log.info('Item changed to ' + JSON.stringify(item));
+localStorage.setItem('ReferedBy', JSON.stringify(item));
+}
+
+function searchTextChange1(text) {
+$scope.TestingSearch = text;
+
+$log.info('Text1 changed to ' + text);
+    
+$http.get('/products/GetProductData/' + text).success(function(response){
+
+ $scope.AddCake={};
+ if(response == "" || response==null)
+ {
+   $scope.AddCake={};
+   console.log($scope.TestingSearch);
+   $scope.AddCake.ProductId ="";
+   $scope.AddCake.CakeName = $scope.TestingSearch;
+   console.log($scope.AddCake);
+   self.repos = response;
+ }
+
+ self.repos = response;
+console.log(response);
+
+});
+}
+function selectedItemChange1(item) {
+console.log($scope.TestingSearch);
+  $scope.AddCake={};
+  if(item)
+  {
+    $scope.AddCake.ProductId = item.Id
+    $scope.AddCake.CakeName = item.ProductName;
+    console.log($scope.AddCake);
+   $log.info('Item1 changed to ' + JSON.stringify(item));
+  }
+}
+    
+$scope.editOrder = function(orderData){
+    
+    console.log(orderData.order); 
+    var productData = orderData.order;
+    
+    var form_data = JSON.parse(productData.product_fields_json);
+    
+        $('#hidden_json').data('key',form_data);
+        $("#hidden_product_id").val(productData.Product_id);
+        //$("#hidden_json").html(data[1] );
+        $('#cake_form').on('show.bs.modal', function(e) {     
+            var $modal = $(this);
+                $modal.find("#modal-header-desc").html(productData.ProductName);
+                 $modal.find('.edit-content').formRender({
+                      dataType: 'json',
+                      formData: productData.product_fields_json  
+                    });
+            //$modal.find('.edit-content').formRender({formData: fbTemplate.value});  
+            });
+        $('#cake_form').modal('show');
+    var originalFormData = $('#hidden_json').data('key');
+
+      var fbRender = document.getElementById('edit-content');
+
+      var formRenderOpts = {
+        formData: JSON.stringify(originalFormData),
+        dataType: 'json'
+      };
+        $scope.Category="0";
+    
+}
+
+
+// On change Product from drop down added by Teja
+$scope.changedCategory = function (val) {
+console.log(val)
+    var data = val.split("|");
+     var form_data = JSON.parse(data[1]);
+    $('#hidden_json').data('key',form_data);
+    $("#hidden_product_id").val(data[2]);
+    //$("#hidden_json").html(data[1] );
+    $('#cake_form').on('show.bs.modal', function(e) {     
+        var $modal = $(this);
+            $modal.find("#modal-header-desc").html(data[0]);
+             $modal.find('.edit-content').formRender({
+                  dataType: 'json',
+                  formData: data[1]  
+                });
+        //$modal.find('.edit-content').formRender({formData: fbTemplate.value});  
+        });
+    $('#cake_form').modal('show');
+var originalFormData = $('#hidden_json').data('key');
+
+  var fbRender = document.getElementById('edit-content');
+ 
+  var formRenderOpts = {
+    formData: JSON.stringify(originalFormData),
+    dataType: 'json'
+  };
+    $scope.Category="0";
+    
+}
+
+} // Seesion variable of Invoice
+
+});
+
+
+
+</script>

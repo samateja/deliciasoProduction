@@ -1,0 +1,100 @@
+<script>
+var PastOrder = angular.module('app1', []);
+
+PastOrder.controller('PastOrderCtrl', ['$rootScope','$scope','modal','$http', function ($rootScope,$scope, modal,$http) {
+
+console.log("came here");
+var myModal = new modal();
+$scope.hideGrid = true;
+$rootScope.gridOptions = {
+onRegisterApi: function (gridApi) {
+$scope.gridApi = gridApi;
+// call resize every 500 ms for 5 s after modal finishes opening - usually only necessary on a bootstrap modal
+$interval( function() {
+$scope.gridApi.core.handleWindowResize();
+}, 500, 10);
+}
+};
+
+
+
+$scope.showModal = function(){
+  $http.get('/api/GetPastOrderDetails/'+$scope.PastOrder.Mobile).success(function(response){
+  if(response)
+  {
+  // $rootScope.gridOptions.data = response.Pending;
+  $rootScope.gridOptions = {
+      data: response.Pending,
+      paginationPageSizes: [15, 30, 45],
+      paginationPageSize: 15,
+       enableColumnResizing: true,
+       enableFiltering: true,
+       enableGridMenu: true,
+       showColumnFooter: true,
+       enableHorizontalScrollbar: 1,
+       enableSorting: true,
+       rowHeight:45.82,
+       enableRowHeaderSelection: true,
+      columnDefs: [{field:'Name', displayName:'Name',width:100},
+  {field:'Mobile', displayName:'Mobile',width:100},
+  {field:'Email', displayName:'Email',width:100},
+  {field:'CakeName', displayName:'Cake Flavour',width:100},
+  {field:'DeliveryType', displayName:'Delivery Type',width:100},
+  {field:'Amount', displayName:'Amount',width:100}
+  ]
+
+  };
+    myModal.open();
+  }
+  });
+
+};
+
+}]);
+
+
+
+  PastOrder.factory('modal', ['$compile', '$rootScope', function ($compile, $rootScope) {
+    return function() {
+      var elm;
+      var modal = {
+        open: function() {
+
+          var html = '<div class="modal" ng-style="modalStyle">{{modalStyle}}<div class="modal-dialog"><div class="modal-content"><div class="modal-header"></div><div class="modal-body"><div id="grid1" ui-grid="gridOptions" class="grid"></div></div><div class="modal-footer"><button id="buttonClose" class="btn btn-primary" ng-click="close()">Close</button></div></div></div></div>';
+          elm = angular.element(html);
+          angular.element(document.body).prepend(elm);
+
+          $rootScope.close = function() {
+            modal.close();
+          };
+
+          $rootScope.modalStyle = {"display": "block"};
+
+          $compile(elm)($rootScope);
+        },
+        close: function() {
+          if (elm) {
+            elm.remove();
+          }
+        }
+      };
+
+      return modal;
+    };
+  }]);
+
+
+
+
+
+
+
+
+
+
+
+
+angular.element(document).ready(function() {
+               angular.bootstrap(document.getElementById("SecondCtrl"), ['app']);
+         });
+</script>

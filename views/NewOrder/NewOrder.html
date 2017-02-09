@@ -1,0 +1,562 @@
+      <!-- page content -->
+      <div class="right_col" role="main" ng-app="myApp"ng-controller="myCtrl" id="SecondCtrl">
+
+        <!-- top tiles -->
+
+        <!-- /top tiles -->
+        <br /><br />
+
+        <div class="alert alert-success" style="display:none;" id="AlertSuccess">
+          <strong style="text-align:center;">Something went wrong!</strong>
+        </div>
+        <div class="row" id="NewOrder" >
+
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Make New Order </h2>
+
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <!-- Smart Wizard -->
+
+                <div id="wizard" class="form_wizard wizard_horizontal">  
+                  <ul class="wizard_steps">
+                    <li>
+                      <a href="#step-1" style="text-decoration: none;">
+                        <span class="step_no">1</span>
+                        <span class="step_descr">
+                                          Customer Details<br />
+
+                                      </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#step-2" style="text-decoration: none;">
+                        <span class="step_no">2</span>
+                        <span class="step_descr ">
+                                          Product Menu<br />
+
+                                      </span>
+                      </a>
+                    </li>
+
+                    <li>
+                      <a href="#step-3" style="text-decoration: none;">
+                        <span class="step_no">3</span>
+                        <span class="step_descr ">
+                                        Delivery Details<br />
+
+                                      </span>
+                      </a>
+                    </li>
+
+                    <li>
+                      <a href="#step-4" style="text-decoration: none;">
+                        <span class="step_no">4</span>
+                        <span class="step_descr">
+                                          Order Summary<br />
+
+                                      </span>
+                      </a>
+                    </li>
+
+                  </ul>
+                  <div id="step-1" class="form1dd" >
+                    <form class="form-horizontal form-label-left" style="min-height: 338px;" >
+                      <h2 class="StepTitle">&nbsp;</h2>
+                      <div class="alert alert-danger"  id="Step1Validation" style="display:none;text-align:center;">
+                      <strong id="Step1Error"></strong>
+                      </div>
+                      <div class="alert alert-success" style="display:none;text-align:center;" id="QuickSaveSuccess">
+                        <strong id="QuickSaveSuccessMessage"></strong>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Mobile <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="OrderMobile" name="last-name"  class="form-control col-md-7 col-xs-12" ng-model="customer.Mobile" ng-blur="search()" ng-required>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Name<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="first-name" class="form-control col-md-7 col-xs-12" ng-model="customer.Name">
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="middle-name" class="form-control col-md-7 col-xs-12" type="email" name="middle-name" ng-model="customer.Email">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div id="gender" class="btn-group" data-toggle="buttons">
+                            <label><input type="radio" name="test" ng-model="customer.Gender" value="Male"/> Male</label>
+                            <label><input type="radio" name="test" ng-model="customer.Gender" value="Female"/> Female</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Address
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <textarea id="last-name" name="last-name" class="form-control col-md-7 col-xs-12" ng-model="customer.Address"></textarea>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Zip Code</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="customer.Zip">
+                        </div>
+
+                      </div>
+                      <div class="form-group" >
+                      <label class="control-label col-md-3 " for="first-name">Refered By
+                      </label>
+                      <div class="col-md-6" ng-controller="myCtrl as ctrl" layout="column" ng-cloak>
+                      <!-- <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="billing.ReferedBy" > -->
+
+                      <md-content layout-padding layout="column">
+                        <form ng-submit="$event.preventDefault()">
+                          <md-autocomplete
+                              ng-disabled="ctrl.isDisabled"
+                              md-no-cache="ctrl.noCache"
+                              md-selected-item="ctrl.selectedItem"
+                              md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+                              md-search-text="ctrl.searchText"
+                              md-selected-item-change="ctrl.selectedItemChange(item)"
+                              md-items="item in ctrl.repos"
+                              md-item-text="item.Name"
+                              md-min-length="0"
+                              placeholder="Who Refered ?"
+                              md-menu-class="autocomplete-custom-template">
+                            <md-item-template>
+                              <span class="item-title">
+
+                                <span> {{item.Name}} </span>
+                              </span>
+                              <span class="item-metadata">
+                                <span class="item-metastat">
+                                  &nbsp;&nbsp;
+                                Mobile:  <strong>{{item.Mobile}}</strong>
+                                </span>
+                                <span class="item-metastat">
+                                  &nbsp;&nbsp;
+                                Email:  <strong>{{item.Email}}</strong>
+                                </span>
+                              </span>
+                            </md-item-template>
+                          </md-autocomplete>
+                        </form>
+                      </md-content>
+
+                      </div>
+                      </div>
+
+
+
+                      <div class="form-group" >
+                      <label class="control-label col-md-3 col-md-push-2" for="first-name">Tag
+                      </label>
+                      <div class="col-md-6"  layout="column" ng-cloak>
+
+<multiple-autocomplete ng-model="customer.selectedTags"
+     object-property="TagName"
+     suggestions-arr="tags">
+</multiple-autocomplete>
+                      <!-- <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="billing.ReferedBy" > -->
+<!--
+                      <md-content layout-padding layout="column">
+                        <form ng-submit="$event.preventDefault()">
+                          <md-autocomplete
+                              ng-disabled="ctrl.isDisabled"
+                              md-no-cache="ctrl.noCache"
+                              md-selected-item="ctrl.selectedItem"
+                              md-search-text-change="ctrl.searchTagTextChange(ctrl.searchText)"
+                              md-search-text="ctrl.searchText"
+                              md-selected-item-change="ctrl.selectedTagItemChange(item)"
+                              md-items="item in ctrl.tags"
+                              md-item-text="item.TagName"
+                              md-min-length="3"
+                              placeholder="Tag"
+                              md-menu-class="autocomplete-custom-template">
+                            <md-item-template>
+                              <span class="item-title">
+                                <span> {{item.TagName}} </span>
+                              </span>
+                           
+                            </md-item-template>
+                          </md-autocomplete>
+                        </form>
+                      </md-content>-->
+
+                      </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-md-9">
+                          <md-button class="md-raised md-primary"  style="float:right;font-weight: bold;" ng-click="QuickSave();">Quick Save</md-button>
+                          <!-- <button class="btn btn-primary"  style="float:right" ng-click="QuickSave();">Quick Save</button> -->
+                        </div>
+
+                      </div>
+                    </form>
+                  </div>
+                  <div id="step-2" class="form1dd">
+                    <h2 class="StepTitle">&nbsp;</h2>
+                    <div class="container">
+
+                      <div class="alert alert-danger"  id="Step2Validation" style="display:none;text-align:center;">
+                      <strong id="Step2Error"></strong>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="last-name">Select Product <span class="required">*</span>
+                        </label>
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" ng-model="Category" ng-change="changedCategory(Category)" >
+                            <option value="0">Choose Product</option>
+                                <option ng-repeat="x in ProductCategory" value="{{x.Product_desc}} | {{x.product_fields_json}} | {{x.product_id}}">{{x.Product_desc}}</option>
+                          </select>
+                        </div>
+                      </div>
+<br><br>
+
+                     <div class="x_panel" ng-show="true">
+                         <div id="cart_message"><p id="err_msg" style="color:red;"></p></div>
+                        <div class="x_title">
+                          <li class="fa fa-shopping-cart"></li>  Cart
+                          <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                          <div class="row">
+                            <div class="col-md-12">
+                                <div id="cart"> </div>
+                              <br><br><br>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+</div>
+</div>
+
+<div id="step-3" class="form1dd">
+  <form class="form-horizontal form-label-left" style="min-height: 300px;" >
+  <h2 class="StepTitle">&nbsp;</h2>
+  <div class="container">
+
+    <div class="alert alert-danger"  id="Step3Validation" style="display:none;text-align:center;">
+    <strong id="Step3Error"></strong>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Delivery Type <span class="required">*</span>
+      </label>
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <div id="gender" class="btn-group" data-toggle="buttons" style="margin-top:6px;">
+          <label style="margin-left:18px;margin-right:30px;"><input type="radio" name="test" ng-model="billing.DeliveryType" ng-click="GetRadioValue()" value="DoorDelivery"/> Door Delivery</label>
+          <label><input type="radio" name="test" ng-model="billing.DeliveryType" ng-click="GetRadioValue()" value="PickUp"/> Pick Up</label>
+        </div>
+      </div>
+
+    </div>
+
+    <div ng-show="Door">
+
+    <div class="form-group">
+      <label class="control-label col-md-3" for="last-name">Delivery Address <span class="required">*</span>
+      </label>
+      <div class="col-md-4">
+
+        <select class="select2_single form-control" tabindex="-1" ng-model="demoTest.SelectedDeliveryAddress" ng-show="ExistingDeliveryAddress">
+              <option ng-repeat="x in DeliveryAddress" value="{{x.Id}}">{{x.DeliveryAddress}}</option>
+        </select>
+
+        <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="demoTest.DeliveryAddress" ng-show="NewDeliveryAddress"></textarea>
+      </div>
+      <div class="col-md-2"><button class="btn btn-info" ng-click="SetDeliveryAddress()" ng-show="ExistingDeliveryAddress">Add New</button></div>
+
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-3" for="last-name">Delivery Charge
+      </label>
+      <div class="col-md-4">
+        <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="billing.DeliveryCharge">
+      </div>
+    </div>
+
+    <!-- <div class="form-group" style="margin-top:30px;">
+      <label class="control-label col-md-3" for="last-name">Delivery Date <span class="required">*</span>
+      </label>
+      <div class="col-md-4">
+        <input type="text"  required="required" class="form-control col-md-6 col-xs-12 datepicker" ng-model="billing.DeliveryDate">
+      </div>
+    </div> -->
+    <div class="form-group">
+      <label class="control-label col-md-3" for="last-name">Delivery Date & Time <span class="required">*</span>
+      </label>
+      <div class="col-md-4">
+        <!-- <input type="text"  class="form-control col-md-6 col-xs-12 time3" ng-model="billing.DeliveryTime"></input> -->
+        <!-- <input mdc-datetime-picker="" date="false" time="true" type="text" id="time" short-time="true"
+        placeholder="Time" min-date="minDate" format="hh:mm a" ng-model="billing.DeliveryTime" class=" md-input"> -->
+
+        <input mdc-datetime-picker="" class="control-label" date="true" time="true" type="text" id="datetime"
+placeholder="Select date and time" min-date="date" ng-model="billing.DeliveryDateTime" class=" md-input" style="width: 320px;text-align: center;font-weight: bold;color: #73879c;">
+
+      </div>
+    </div>
+    </div>
+    <div ng-show="Pick">
+
+      <div class="form-group">
+      <label class="control-label col-md-3" for="last-name">Pick-Up Date <span class="required">*</span>
+      </label>
+      <div class="col-md-4">
+        <!-- <input type="text"  required="required" class="form-control col-md-7 col-xs-12 datepicker" ng-model="billing.PickUpDate"> -->
+        <input mdc-datetime-picker="" class="control-label" date="true" time="true" type="text" id="datetime"
+placeholder="Select date and time" min-date="date" ng-model="billing.PickUpDateTime" class=" md-input" style="width: 320px;text-align: center;font-weight: bold;color: #73879c;">
+      </div>
+      </div>
+
+      <!-- <div class="form-group">
+      <label class="control-label col-md-3" for="last-name">Pick-Up Time <span class="required">*</span>
+      </label>
+      <div class="col-md-4">
+        <input type="text" class="form-control col-md-7 col-xs-12 timepicker" ng-model="billing.PickUpTime">
+
+      </div>
+      </div> -->
+
+    </div>
+</div>
+</form>
+</div>
+
+                <div id="step-4" style="min-height:700px;" class="form1dd">
+
+                  <div class="" role="main">
+
+                    <div class="">
+
+                      <div class="clearfix"></div>
+
+                      <div class="alert alert-success"  id="OrderSuccess" style="display:none;text-align:center;">
+                      <strong id="SuccessOrderMessage"></strong>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="x_panel">
+                            <div class="x_title">
+                              <h2>Order Summary </h2>
+
+                              <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+
+                              <section class="content Summary">
+                                <!-- title row -->
+                                <div class="row">
+                                  <div class="col-xs-12 Summary-header">
+                                    <h1>
+                                        <i class="fa fa-globe"></i> Summary
+                                        <!-- <small class="pull-right">Date: {{billing.OrderDate}}</small> -->
+                                    </h1>
+                                      <h2>Invoice: &nbsp; #{{Prev_OrderId.OrderId}} </h2>
+                                  </div>
+                                  <!-- /.col -->
+                                </div>
+                                <!-- info row -->
+                                <div class="row Summary-info">
+                                  <div class="col-sm-4 Summary-col">
+                                    From
+                                    <address>
+                                        <strong>{{org_address.OrganizationName}}</strong>
+                                        <br>Address line 1: {{org_address.OrganizationAddress}}
+                                        <br>Address line 2:
+                                        <br>Phone: {{org_address.Mobile}}
+                                        <br>Email: {{org_address.Email}}
+                                    </address>
+                                  </div>
+                                  <!-- /.col -->
+                                  <div class="col-sm-4 Summary-col">
+                                    To
+                                    <address style="overflow: auto;">
+                                        <strong>{{customer.Name}}</strong>
+                                        <br>{{customer.Address}}
+                                        <br>{{customer.Zip}}
+                                        <br>Phone:{{customer.Mobile}}
+                                        <br>Email:{{customer.Email}}
+                                    </address>
+                                  </div>
+                                  <!-- /.col -->
+                                  <div class="col-sm-4 Summary-col" ng-show="InvoiceDelivery">
+                                    <b>Delivery Details</b>
+                                    <br>
+                                    <br>
+                                    <b>Delivery Type:</b> {{billing.DeliveryType}}
+                                    <br>
+                                    <b>Delivery Date:</b> <span id="ShowDeliveryDate"></span>
+                                    <br>
+                                    <b>Delivery Time:</b> <span id="ShowDeliveryTime"></span>
+                                    <br>
+                                    <!-- <b>Delivery Address:</b> {{demoTest.SelectedDeliveryAddress}} -->
+                                    <b>Delivery Address:</b> <h5 style="overflow:hidden;" id="ShowDeliveryAddress"></h5>
+                                  </div>
+                                  <div class="col-sm-4 Summary-col" ng-show="InvoicePickUp">
+                                    <b>Pick Up Details</b>
+                                    <br>
+                                    <br>
+                                    <b>Delivery Type:</b> {{billing.DeliveryType}}
+                                    <br>
+                                    <b>Pick-Up Date:</b> <span id="ShowPickUpDate"></span>
+                                    <br>
+                                    <b>Pick-Up Time:</b> <span id="ShowPickUpTime"></span>
+
+                                  </div>
+                                  <!-- /.col -->
+                                </div>
+                                <!-- /.row -->
+
+                                <!-- Table row -->
+                                <div class="row">
+                                  <div class="col-xs-12 table">
+                                    <table class="table table-striped">
+                                      <thead>
+                                        <tr>
+                                          <th>Product Name</th>
+                                          <th>Amount</th>
+                                          <th>Subtotal</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr ng-repeat="Product in productData">
+                                          <td>{{Product.product_name}}</td>
+                                          <td>{{Product.Product_amount}}</td>
+                                          <td>{{Product.Product_amount}}</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  <!-- /.col -->
+                                </div>
+                                <!-- /.row -->
+
+                                <div class="row">
+                                  <!-- accepted payments column -->
+                                  <div class="col-xs-6">
+
+                                  </div>
+                                  <!-- /.col -->
+                                  <div class="col-xs-6">
+                                    <p class="lead">Amount Details</p>
+                                    <div class="table-responsive">
+                                      <table class="table">
+                                        <tbody>
+                                          <tr>
+                                            <th style="width:50%">Subtotal:</th>
+                                            <td>Rs.{{billing.Amount}}</td>
+                                          </tr>
+
+                                          <tr>
+                                            <th>Shipping:</th>
+                                            <td>Rs.{{billing.DeliveryCharge}}</td>
+                                          </tr>
+                                          <tr>
+                                            <th>Total:</th>
+                                            <td>Rs.{{ billing.Amount -- billing.DeliveryCharge }}</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  <!-- /.col -->
+                                </div>
+                                <!-- /.row -->
+
+                                <!-- this row will not appear when printing -->
+                                <div class="row no-print">
+                                  <div class="col-xs-12">
+
+                                    <button class="btn btn-primary" ng-click="PlaceOrder()" style="float:right;"><i class="fa fa-thumbs-up"></i>Confirm Order</button>
+
+                                  </div>
+                                </div>
+                              </section>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                  <!-- /page content -->
+
+                </div>
+
+                </div>
+                <!-- End SmartWizard Content -->
+
+                <!-- Tabs -->
+
+
+                <!-- End SmartWizard Content -->
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+<script>
+$( document ).ready(function() {
+
+  $(document).on("keyup",'input[ng-model="inputValue"]', function(){  
+ if($('.checkBoxContainer .acol').length==0 && $(this).val().length>2){
+  $('#tagModal').modal('show');
+  $('input[ng-model="addTag.tagName"]').val($(this).val());  
+  $('input[ng-model="addTag.tagName"]').focus();
+ }else{
+  $('#tagModal').modal('hide');
+  $('input[ng-model="addTag.tagName"]').val("");
+ }
+}); 
+
+});
+function closeModal(){
+  var searchBox= $('input[ng-model="inputValue"]');
+ searchBox.val("");
+ searchBox.focus();
+
+}
+    
+/*--This JavaScript method for Print Preview command--*/
+    function PrintPreview() {
+        var toPrint = document.getElementById('printarea');
+        var popupWin = window.open('', '_blank', 'width=350,height=150,location=no,left=200px');
+        popupWin.document.open();
+        popupWin.document.write('<html><title>::Print Preview::</title><link rel="stylesheet" type="text/css" href="Print.css" media="screen"/></head><body">')
+        popupWin.document.write(toPrint.innerHTML);
+        popupWin.document.write('</html>');
+        popupWin.document.close();
+    }
+</script>
+ 

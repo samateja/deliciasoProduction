@@ -1,0 +1,324 @@
+<script>
+
+ 
+$( document ).ready(function() {
+   var logo_path = localStorage.getItem('logo_path');
+    var img = '<img src="upload/'+logo_path+'" class="img-circle profile_img" style="height:86px;width:134px;">'
+    $('#appendLogo').append(img);
+});
+</script>
+
+<body class="nav-md" >
+
+  <div class="container body">
+
+
+    <div class="main_container">
+
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+
+          <div class="navbar nav_title" style="border: 0;">
+            <a href="/order" class="site_title" style="height:106px;padding-left:0px;" id="appendLogo"></a>
+          </div>
+          <div class="clearfix"></div>
+
+          <!-- menu prile quick info -->
+          <div class="profile" style="margin-top:50px;">
+            <div class="profile_pic">
+              <img src="images/avatar.ico" alt="..." class="img-circle profile_img">
+            </div>
+            <div class="profile_info">
+              <span>Welcome,</span>
+              <h2>Admin</h2>
+            </div>
+          </div>
+          <!-- /menu prile quick info -->
+
+          <br />
+
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu" >
+
+            <div class="menu_section">
+              <h3>&nbsp;</h3>
+              <ul class="nav side-menu">
+                <!-- <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a></li>
+                  <ul class="nav child_menu" style="display: none"> -->
+                    <li><a href="/dashboard">Dashboard</a>
+                    </li>
+                    <li><a href="/order">New Order</a>
+                    </li>
+                    <li><a href="/payment">Orders</a>
+                    </li>
+                    <li><a href="/products">Products</a>
+                    </li>
+                    <li><a href="/customers">Customers</a>
+                    </li>
+                 <!-- </ul> -->
+                
+              </ul>
+            </div>
+          </div>
+          <!-- /sidebar menu -->
+
+          <!-- /menu footer buttons -->
+          <div class="sidebar-footer hidden-small">
+            <a data-toggle="tooltip" data-placement="top" title="Settings">
+              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+              <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="Lock">
+              <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="Logout">
+              <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+            </a>
+          </div>
+          <!-- /menu footer buttons -->
+        </div>
+      </div>
+
+      <!-- top navigation -->
+      <div class="top_nav">
+
+        <div class="nav_menu">
+          <nav class="" role="navigation">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+
+            </div>
+          <div ng-app="app1" ng-controller="PastOrderCtrl">
+            <div class="input-group  nav navbar-nav" style="width:339px;margin-top:7px;margin-left: 530px;" >
+            <input type="text" class="form-control col-md-4 " ng-model="PastOrder.Mobile" placeholder="Enter Customer Mobile Number">
+            <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" ng-click="showModal()">Go!</button>
+            </span>
+
+            </div>
+
+            <div class="modal fade" id="CommonPendingPaymentModal" role="dialog" style="display:none;top:50px;" >
+                <div class="modal-dialog" style="width: 40%;" >
+
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Make Payment</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form class="form-horizontal form-label-left" style="min-height: 300px;">
+
+                                              <div class="alert alert-danger"  id="PendingPaymentValidation" style="display:none;text-align:center;">
+                                              <strong id="PendingPaymentError"></strong>
+                                              </div>
+
+                            <div class="form-group">
+                              <label class="control-label col-md-3 " for="last-name">Order Id
+                              </label>
+                              <div class="col-md-6">
+                                <input type="text" id="mobile" name="last-name" disabled class="form-control col-md-7 col-xs-12" ng-model="CommonPendingPayment.CakeOrderId">
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Amount Payable</label>
+                              <div class="col-md-6">
+                                <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" disabled name="middle-name" ng-model="CommonPendingPayment.Amount">
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Payment Type</label>
+                              <div class="col-md-6">
+                                <div class="btn-group" data-toggle="buttons">
+                                  <label><input type="radio" name="test" ng-model="CommonPendingPayment.PaymentType" value="0" ng-click="GetCommonPendingPaymentType()"/> Cash</label>
+                                  <label><input type="radio" name="test" ng-model="CommonPendingPayment.PaymentType" value="1" ng-click="GetCommonPendingPaymentType()"/> NEFT</label>
+                                  <label><input type="radio" name="test" ng-model="CommonPendingPayment.PaymentType" value="2" ng-click="GetCommonPendingPaymentType()"/> Card</label>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="form-group" ng-show="CommonPendingecm">
+                              <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">NEFT Txn Number</label>
+                              <div class="col-md-6">
+                                <input  class="form-control col-md-7 col-xs-12" type="text" placeholder="optional.." ng-model="CommonPendingPayment.NeftTxnNo">
+                              </div>
+                            </div>
+
+                            <div class="form-group" ng-show="CommonPendingpos">
+                              <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Card Txn Number</label>
+                              <div class="col-md-6">
+                                <input  class="form-control col-md-7 col-xs-12" type="text" placeholder="optional.." ng-model="CommonPendingPayment.CardTxnNo">
+                              </div>
+                            </div>
+
+
+                            <div class="form-group">
+                              <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Amount Paid</label>
+                              <div class="col-md-6">
+                                <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="CommonPendingPayment.PaidAmount" ng-keyup="SetCommonPendingPaymentStatus()">
+                              </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Payment Status</label>
+                              <div class="col-md-6">
+                                <select class="select2_single form-control" tabindex="-1" ng-model="CommonPendingPayment.PaymentStatus" ng-click="SetCommonPendingDiscount()">
+                                                          <option value="0">Pending</option>
+                                                          <option value="1">Partial</option>
+                                                          <option value="2" >Completed</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-group" ng-show="CommonPendingDiscount">
+                              <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Discount (Rs.)</label>
+                              <div class="col-md-6">
+                                <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="CommonPendingPayment.Discount">
+                              </div>
+                            </div>
+
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                      <button type="button" class="btn btn-success" style="float:right;" ng-click="MakeCommonPendingPayment()">Make Payment</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="modal fade" id="CommonPartialPaymentModal" role="dialog" style="display:none;top:50px;">
+                  <div class="modal-dialog" style="width: 40%;">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Make Payment</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form class="form-horizontal form-label-left" style="min-height: 300px;">
+
+                                                <div class="alert alert-danger"  id="PartialPaymentValidation" style="display:none;text-align:center;">
+                                                <strong id="PartialPaymentError"></strong>
+                                                </div>
+
+                              <div class="form-group">
+                                <label class="control-label col-md-4 " for="last-name">Order Id
+                                </label>
+                                <div class="col-md-6">
+                                  <input type="text" id="mobile" name="last-name" disabled class="form-control col-md-7 col-xs-12" ng-model="CommonPartialPayment.CakeOrderId">
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Total Amount Payable </label>
+                                <div class="col-md-6">
+                                  <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" disabled ng-model="CommonPartialPayment.Amount">
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Paid Amount</label>
+                                <div class="col-md-6">
+                                  <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" disabled ng-model="CommonPartialPayment.PaidAmount" >
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Due Amount </label>
+                                <div class="col-md-6">
+                                  <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text"  name="middle-name"   ng-model="CommonPartialPayment.DueAmount" ng-keyup="SetCommonPartialPaymentStatus()">
+                                </div>
+                              </div>
+
+                              <!-- <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Pay</label>
+                                <div class="col-md-6">
+                                  <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" disabled name="middle-name"   ng-model="PartialPayment.pay">
+                                </div>
+                              </div> -->
+
+
+
+                              <div class="form-group">
+                                <label class="control-label col-md-4 col-sm-4 col-xs-12">Payment Type</label>
+                                <div class="col-md-6">
+                                  <div class="btn-group" data-toggle="buttons">
+                                    <label><input type="radio" name="test" ng-model="CommonPartialPayment.PaymentType" value="0"ng-click="GetCommonPartialPaymentType()"/> Cash</label>
+                                    <label><input type="radio" name="test" ng-model="CommonPartialPayment.PaymentType" value="1" ng-click="GetCommonPartialPaymentType()"/> NEFT</label>
+                                    <label><input type="radio" name="test" ng-model="CommonPartialPayment.PaymentType" value="2" ng-click="GetCommonPartialPaymentType()"/> Card</label>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="form-group" ng-show="CommonPartialecm">
+                                <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">NEFT Txn Number</label>
+                                <div class="col-md-6">
+                                  <input  class="form-control col-md-7 col-xs-12" type="text" placeholder="optional.." ng-model="CommonPartialPayment.NeftTxnNo">
+                                </div>
+                              </div>
+
+                              <div class="form-group" ng-show="CommonPartialpos">
+                                <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Card Txn Number</label>
+                                <div class="col-md-6">
+                                  <input  class="form-control col-md-7 col-xs-12" type="text" placeholder="optional.." ng-model="CommonPartialPayment.CardTxnNo">
+                                </div>
+                              </div>
+
+
+
+                              <div class="form-group">
+                                <label class="control-label col-md-4 col-sm-4 col-xs-12">Payment Status</label>
+                                <div class="col-md-6">
+                                  <select class="select2_single form-control" tabindex="-1" ng-model="CommonPartialPayment.PaymentStatus" ng-click="SetCommonPartialDiscount()">
+                                                            <option value="0">Pending</option>
+                                                            <option value="1">Partial</option>
+                                                            <option value="2" >Completed</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div class="form-group" ng-show="CommonPartialDiscount">
+                                <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Discount(Rs.)</label>
+                                <div class="col-md-6">
+                                  <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="CommonPartialPayment.Discount">
+                                </div>
+                              </div>
+
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                        <button type="button" class="btn btn-success" style="float:right;" ng-click="MakeCommonPartialPayment()">Make Payment</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+</div>
+            <ul class="nav navbar-nav navbar-right" style="width:150px;">
+              <li class="">
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  <img src="images/avatar.ico" alt="">Admin
+                  <span class=" fa fa-angle-down"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
+                  <li><a href="javascript:;">  Profile</a>
+                  </li>
+                  <li><a href="/login/Logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>

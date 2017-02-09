@@ -1,0 +1,588 @@
+<!-- Cake Modal -->
+    
+<!-- Common modal popup -->
+    
+    <div class="modal fade" id="cake_form" role="dialog" style="display:none;top:20px;">
+    <div class="modal-dialog" style="width: 70%;">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id="modal-header-desc"></h4>
+        </div>
+          <div> <p id="error_message" style="color:red !important;margin:1%;"> </p> </div>
+                <form class="modal-body edit-content" id="edit-content">
+
+                </form>
+          <div><input type="hidden" id="hidden_json"></input></div>
+        <div><input type="hidden" id="hidden_product_id"></input></div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default"  data-dismiss="modal" style="float:left;">Close</button>
+            <input type="button" class="btn btn-primary" style="float:right;" ng-click="SaveCakeOrder()" value="Save"></input>
+            </div>
+        </div>
+        </div>
+        </div>
+        
+
+
+    
+<!-- End of common modal popup -->
+
+
+
+<!-- Edit Invoice Order -->
+
+    <div class="modal fade" id="EditOrder" role="dialog" style="display:none;top:20px;">
+    <div class="modal-dialog" style="width: 70%;">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id="modal-header-desc"></h4>
+        </div>
+          <div> <p id="error_message" style="color:red !important;margin:1%;"> </p> </div>
+                <form class="modal-body edit-orderContent" id="edit-orderContent">
+
+                </form>
+          <div><input type="hidden" id="hidden_json1"></input></div>
+        <div><input type="hidden" id="hidden_product_id1"></input></div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default"  data-dismiss="modal" style="float:left;">Close</button>
+            <input type="button" class="btn btn-primary" style="float:right;" ng-click="SaveCakeOrder()" value="Save"></input>
+            </div>
+        </div>
+        </div>
+        </div>
+
+<!-- Endof Edit Invoice Order -->
+    
+    
+<div class="modal fade" id="MakeCakeOrder" role="dialog" style="display:none;top:20px;">
+    <div class="modal-dialog" style="width: 70%;">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add Order</h4>
+        </div>
+        <div class="modal-body">
+          <form  class="form-horizontal form-label-left" style="min-height: 400px;" novalidate>
+            <div class="alert alert-danger"  id="CakeOrderValidation" style="display:none;text-align:center;">
+            <strong id="CakeOrderError"></strong>
+            </div>
+            <div>
+            <div class="row" >
+              <div class="col-md-6">
+                <div class="form-group" >
+                  <label class="control-label col-md-4 " for="last-name">Cake Flavour*
+                  </label>
+                  <div class="col-md-8">
+                    <input type="text"  name="CakeName"  class="form-control col-md-7 col-xs-12" ng-model="AddCake.CakeName" >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label col-md-4" for="first-name">Size (kg)*
+                  </label>
+                  <div class="col-md-8">
+                    <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Size">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label col-md-4" for="first-name">Quantity
+                  </label>
+                  <div class="col-md-8">
+                    <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Quantity">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-4 col-xs-12">Type*</label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+
+                    <select class="select2_single form-control" tabindex="-1" ng-model="AddCake.Type" ng-click="SetDiscount()">
+                                              <option value="Celebration">Celebration</option>
+                                              <option value="Tea Time">Tea Time</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-3 col-xs-12">Shape</label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="AddCake.Shape">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-4 col-xs-12" for="last-name">Occasion
+                  </label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="AddCake.Occasion">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-4 col-xs-12" for="last-name">Message on cake
+                  </label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    <textarea id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="AddCake.Message"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Decoration Instruction</label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.DecorationInstr"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Ingredient Instruction </label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.IngredientInstr"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-4 col-xs-12">Comments</label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Comments"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Amount* </label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input id="middle-name" class="form-control col-md-7 col-xs-12" type="number" name="middle-name" ng-model="AddCake.Amount">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6"></div>
+            </div>
+          </div>
+        </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+          <button type="button" class="btn btn-primary"  style="float:right;" ng-click="SaveCakeOrder()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Cup cake modal -->
+
+  <div class="modal fade" id="cupCakeModal" role="dialog" style="display:none;top:20px;">
+      <div class="modal-dialog" style="width: 55%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add Order</h4>
+          </div>
+          <div class="modal-body">
+            <form  class="form-horizontal form-label-left" style="min-height: 257px;" novalidate>
+              <div class="alert alert-danger"  id="CakeOrderValidation" style="display:none;text-align:center;">
+              <strong id="CakeOrderError"></strong>
+              </div>
+              <div>
+              <div class="row" >
+                <div class="col-md-6">
+                  <div class="form-group" >
+                    <label class="control-label col-md-4 " for="last-name">Cake Flavour*
+                    </label>
+                    <div class="col-md-8">
+                      <input type="text"  name="CakeName"  class="form-control col-md-7 col-xs-12"  ng-model="AddCake.CakeName" >
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label col-md-4" for="first-name">Size (kg)*
+                    </label>
+                    <div class="col-md-8">
+                      <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Size">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label col-md-4" for="first-name">Quantity
+                    </label>
+                    <div class="col-md-8">
+                      <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Quantity">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Amount* </label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                      <input id="middle-name" class="form-control col-md-7 col-xs-12" type="number" name="middle-name" ng-model="AddCake.Amount">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label col-md-4 col-sm-3 col-xs-12">Shape</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                      <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name" ng-model="AddCake.Shape">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Ingredient Instruction </label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                      <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.IngredientInstr"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label col-md-4 col-sm-4 col-xs-12">Comments</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                      <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Comments"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+            <button type="button" class="btn btn-primary"  style="float:right;" ng-click="SaveCakeOrder()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<!-- Brownie Modal -->
+
+    <div class="modal fade" id="brownieModal" role="dialog" style="display:none;top:20px;">
+        <div class="modal-dialog" style="width: 55%;">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Add Order</h4>
+            </div>
+            <div class="modal-body">
+              <form  class="form-horizontal form-label-left" style="min-height: 257px;" novalidate>
+                <div class="alert alert-danger"  id="CakeOrderValidation" style="display:none;text-align:center;">
+                <strong id="CakeOrderError"></strong>
+                </div>
+                <div>
+                <div class="row" >
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="control-label col-md-4" for="first-name">Size (kg)*
+                      </label>
+                      <div class="col-md-8">
+                        <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Size">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="control-label col-md-4" for="first-name">Quantity
+                      </label>
+                      <div class="col-md-8">
+                        <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Quantity">
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row">
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Amount* </label>
+                      <div class="col-md-8 col-sm-8 col-xs-12">
+                        <input id="middle-name" class="form-control col-md-7 col-xs-12" type="number" name="middle-name" ng-model="AddCake.Amount">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Ingredient Instruction </label>
+                      <div class="col-md-8 col-sm-8 col-xs-12">
+                        <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.IngredientInstr"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="control-label col-md-4 col-sm-4 col-xs-12">Comments</label>
+                      <div class="col-md-8 col-sm-8 col-xs-12">
+                        <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Comments"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </form>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+              <button type="button" class="btn btn-primary"  style="float:right;" ng-click="SaveCakeOrder()">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+<!-- Chocolates Modal -->
+
+      <div class="modal fade" id="chocoModal" role="dialog" style="display:none;top:20px;">
+          <div class="modal-dialog" style="width: 55%;">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Order</h4>
+              </div>
+              <div class="modal-body">
+                <form  class="form-horizontal form-label-left" style="min-height: 257px;" novalidate>
+                  <div class="alert alert-danger"  id="CakeOrderValidation" style="display:none;text-align:center;">
+                  <strong id="CakeOrderError"></strong>
+                  </div>
+                  <div>
+                  <div class="row" >
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label col-md-4" for="first-name">Size (kg)*
+                        </label>
+                        <div class="col-md-8">
+                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Size">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label col-md-4" for="first-name">Quantity
+                        </label>
+                        <div class="col-md-8">
+                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Quantity">
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="row">
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Amount* </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                          <input id="middle-name" class="form-control col-md-7 col-xs-12" type="number" name="middle-name" ng-model="AddCake.Amount">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Ingredient Instruction </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                          <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.IngredientInstr"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Comments</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                          <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Comments"></textarea>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </form>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                <button type="button" class="btn btn-primary"  style="float:right;" ng-click="SaveCakeOrder()">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<!-- Other Modal -->
+
+        <div class="modal fade" id="otherModal" role="dialog" style="display:none;top:20px;">
+            <div class="modal-dialog" style="width: 55%;">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Add Order</h4>
+                </div>
+                <div class="modal-body">
+                  <form  class="form-horizontal form-label-left" style="min-height: 257px;" novalidate>
+                    <div class="alert alert-danger"  id="CakeOrderValidation" style="display:none;text-align:center;">
+                    <strong id="CakeOrderError"></strong>
+                    </div>
+                    <div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="control-label col-md-4" for="first-name">Item Name
+                            </label>
+                            <div class="col-md-8">
+                              <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.CakeName">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="control-label col-md-4" for="first-name">Size (kg)*
+                            </label>
+                            <div class="col-md-8">
+                              <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Size">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="row" >
+
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="control-label col-md-4" for="first-name">Quantity
+                          </label>
+                          <div class="col-md-8">
+                            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Quantity">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Amount* </label>
+                          <div class="col-md-8 col-sm-8 col-xs-12">
+                            <input id="middle-name" class="form-control col-md-7 col-xs-12" type="number" name="middle-name" ng-model="AddCake.Amount">
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="row">
+
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Ingredient Instruction </label>
+                          <div class="col-md-8 col-sm-8 col-xs-12">
+                            <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.IngredientInstr"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-4 col-xs-12">Comments</label>
+                          <div class="col-md-8 col-sm-8 col-xs-12">
+                            <textarea id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="AddCake.Comments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </form>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" style="float:left;">Close</button>
+                  <button type="button" class="btn btn-primary"  style="float:right;" ng-click="SaveCakeOrder()">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+<!-- New Tag Modal -->
+
+        <div class="modal fade" id="tagModal" role="dialog" style="display:none;top:20px;">
+            <div class="modal-dialog" >
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Add New Tag</h4>
+                </div>
+                <div class="modal-body">
+                  <form  class="form-horizontal form-label-left" novalidate>
+                    <div class="alert alert-danger"  id="CakeOrderValidation" style="display:none;text-align:center;">
+                    <strong id="tagError"></strong>
+                    </div>
+                    <div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="control-label col-md-4" for="tag-name">Tag Name
+                            </label>
+                            <div class="col-md-8">
+                              <input type="text" id="tag-name" required="required" class="form-control col-md-7 col-xs-12" ng-model="addTag.tagName">
+                            </div>
+                          </div>
+                        </div>
+                    
+                      </div>
+
+                  </div>
+                </form>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()" >Close</button>
+                  <button type="button" class="btn btn-primary"  style="float:right;" ng-click="SaveTag()">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>

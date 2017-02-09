@@ -1,0 +1,179 @@
+
+      <!-- page content -->
+      <div class="right_col" role="main" style="height:900px !important;" ng-app="myApp" id="SecondCtrl" ng-controller="myCtrl" ng-init="init()">
+
+        <br /><br />
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+
+
+  <div class="alert alert-success"  id="SmsSuccess" style="display:none;text-align:center;">
+  <strong id="SmsSuccessMessage"></strong>
+  </div>
+  <div class="alert alert-danger"  id="SmsError" style="display:none;text-align:center;">
+  <strong id="SmsErrorMessage"></strong>
+  </div>
+
+
+    <div class="x_panel">
+        <div class="x_title">
+          <h2><i class="fa fa-user"></i> Add Product</h2>
+          <div class="clearfix"></div>
+        </div> 
+        
+          <div class="form-group" style="margin-top:3%;margin-bottom:-3%;">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="add-product">Product Name <span class="required">*</span>
+            </label>
+            <div class="col-md-4 col-sm-4 col-xs-4">
+              <input type="text" id="add_product" name="last-name" ng-model="add_product" Placeholder ="Enter new Product" class="form-control col-md-4 col-xs-12" required ng-required="required">
+                <div id="msg1"> <p id="msg" style="color:red;"></p> </div>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2" ng-controller="AddProduct">
+                  <input type="button" class="form-control btn-success" id="save_button" value="Save" style="padding: 2px !important;" ng-click="ButtonClick()">  </input>
+            </div>
+             
+          </div>
+  <div class="content">
+      <div id="msg2"> <p id="err_msg" style="color:red;"></p> </div>
+    <h1>Use the Following Wizard to link items to the Product</h1>
+    <div class="build-wrap"></div>
+    <div class="render-wrap"></div>
+<!--   <button id="edit-form">Edit Form</button>-->
+  </div>
+
+    <script>
+        
+        $(document).ready(function($) {
+                        
+          var buildWrap = document.querySelector('.build-wrap'),
+            renderWrap = document.querySelector('.render-wrap'),
+            editBtn = document.getElementById('edit-form'),
+            formData = window.sessionStorage.getItem('formData'),
+            editing = true,
+            fbOptions = {
+              dataType: 'json',
+              fieldRemoveWarn: true,
+              defaultFields: [{
+                    class: "form-control",
+                    label: "Amount",
+                    placeholder: "Enter Amount",
+                    name: "amount",
+                    required: true,
+                    type: "number"
+                  }],
+              disableFields: ['button','file','header','hidden'],
+                notify: {
+                error: function(message) {
+                  return console.error(message);
+                },
+                success: function(message) {
+                  return console.log(message);
+                },
+                warning: function(message) {
+                  return console.warn(message);
+                }
+              },
+              
+            };
+        
+
+          if (formData) {
+            fbOptions.formData = JSON.parse(formData);
+          }
+
+          var toggleEdit = function() {
+            document.body.classList.toggle('form-rendered', editing);
+            editing = !editing;
+          };
+          //console.log(fbOptions)
+          var formBuilder = $(buildWrap).formBuilder(fbOptions).data('formBuilder');
+
+          $('.form-builder-save').click(function() {
+            toggleEdit();
+              if ((formBuilder.formData).length < 2 || formBuilder.formData == "[]"){
+                  $('#msg2').show(1000).delay(2000).hide(1000);
+                  $('#err_msg').html("Please select atleast one item");
+                  toggleEdit();
+              }
+              else{
+                $(renderWrap).formRender({
+                  dataType: 'json',
+                  formData: formBuilder.formData
+                });
+                var product_data = JSON.parse(window.sessionStorage.getItem('product_info'));
+                  var update_product = {'P_id':product_data.P_id,'baker_id':product_data.B_id,'product_fields_json':formBuilder.formData};
+                      $.ajax({
+                      type: 'POST',
+                      url: "/products/Updateproduct",
+                      data: update_product,
+                      dataType: "json",
+                      success: function(resultData) {
+                           location.reload();
+
+                      },
+                      error: function(err){
+                          alert("Product didn't created succesfully");
+                          console.log(err);
+                      }
+                    });
+                }
+          });
+
+//          editBtn.onclick = function() {
+//            toggleEdit();
+//          };
+        });
+        
+    </script>
+        
+  <script>
+      
+
+
+  var app = angular.module('myApp', ['ui.grid','ui.grid.pinning','ui.grid.pagination','ui.grid.resizeColumns','ui.grid.selection','ui.grid.autoResize','ui.grid.exporter']);
+
+  // app.controller('myCtrl', function($scope,$http,$timeout, $q, $log,uiGridConstants) {
+    
+      app.controller('AddProduct', function($scope,$http) {
+        $scope.ButtonClick = function () {
+            if ($scope.add_product == "" || $scope.add_product == null){
+                $('#msg1').show(1000).delay(2000).hide(1000);
+                $('#msg').html("Please Add Product");
+            }
+            else{
+                 var data = {'product_name':$scope.add_product};
+                $http.post('/products/Addproduct',data).success(function(data){
+                 if (data.status == 0){
+                    $('#msg1').show(1000).delay(2000).hide(1000);
+                    $('#msg').html("Product already exists");
+                 } 
+                  else{
+                      $("#save_button").prop('disabled','disabled');
+                     $('#msg1').show(1000).delay(2000).hide(1000);
+                     $('#msg').html("Product Added Succesfully");
+                      console.log(data);
+                      $(".form-builder-save").prop('disabled',false);
+                      var info = {'P_id':data.p_id,'B_id':data.Baker_id};
+                     window.sessionStorage.setItem('product_info', JSON.stringify(info));   
+                  }
+                }); 
+            }   
+        }
+ });
+      
+    app.controller('myCtrl', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, $uiGridConstants) {
+         $(".form-builder-save").prop('disabled','disabled');
+         $("#frmb-0-view-data").hide();
+
+}]);
+      
+
+      
+</script>
+
+
+
+</body>
+
+
+</html>

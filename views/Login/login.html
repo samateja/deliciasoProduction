@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Deliciaso | Login</title>
+
+  <!-- Bootstrap core CSS -->
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="fonts/css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/animate.min.css" rel="stylesheet">
+
+  <!-- Custom styling plus plugins -->
+  <link href="css/custom.css" rel="stylesheet">
+  <link href="css/icheck/flat/green.css" rel="stylesheet">
+
+
+  <script src="js/jquery.min.js"></script>
+  <script src="angular/angular.min.js"></script>
+  <script src="js/jquery.form.js"></script>
+
+  <!--[if lt IE 9]>
+        <script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <![endif]-->
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+</head>
+
+<body style="background:#F7F7F7;" ng-controller="loginCtrl">
+
+  <div class="">
+    <a class="hiddenanchor" id="toregister"></a>
+    <a class="hiddenanchor" id="tologin"></a>
+
+    <div id="wrapper">
+      <div id="login" class="animate form">
+        <section class="login_content">
+          <form name="loginForm" ng-submit="Login(loginForm.$valid)">
+
+             <div class="alert alert-success" style="display:none;text-align:center;">
+                                      <strong id="ErrorMessage1" ></strong>
+                                      </div>
+                                         <div class="alert alert-danger" style="display:none;text-align:center;">
+                                      <strong id="ErrorMessage2" ></strong>
+                                      </div>
+
+            <div>
+            <img src="images/deliciaso_logo.png" class="img-circle profile_img" style="height: 112px;width: 145px;margin-left: 0px !important;">
+            </div>
+            <h1>Admin Login</h1>
+            <div>
+              <input type="text" class="form-control" ng-model="login.user_email" placeholder="Username" id="Username"required="" />
+            </div>
+            <div>
+              <input type="password" class="form-control" ng-model="login.password" placeholder="Password" id="Pwd" required="" />
+            </div>
+            <div >
+              <input type="submit" class="btn btn-success"  value="Login"></input>
+
+              <a class="reset_pass" href="#">Lost your password?</a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="separator">
+
+              <p class="change_link">New to site?
+                <a href="#toregister" class="to_register"> Sign Up </a>
+              </p>
+              <div class="clearfix"></div>
+              <br />
+
+                <p>©2016 All Rights Reserved. Aguai Solutions.</p>
+              </div>
+            </div>
+          </form>
+          <!-- form -->
+        </section>
+        <!-- content -->
+        <div id="register" class="animate form">
+                <section class="login_content">
+                  <!-- <form name="regForm" ng-submit="reg(regForm.$valid)" > -->
+
+                    <form enctype="multipart/form-data"  id="regForm" role="form" method="post" >
+                    <h1>Sign Up</h1>
+                  
+ <div class="alert alert-success" style="display:none;text-align:center;">
+                                      <strong id="ErrorMessage3" ></strong>
+ </div>
+                    <div class="alert alert-danger" style="display:none;text-align:center;">
+                                      <strong id="ErrorMessage" ></strong>
+                                      </div>
+                    <div>
+                      <input type="text" class="form-control" placeholder="Organization Name"  ng-model="register.organizationName" required="" name="organizationName"/>
+                    </div>
+                    <div>
+                      <input type="text"  class="form-control" placeholder="Mobile"  maxlength="10"  pattern="[0-9]{10}" name="organizationMobile" ng-model="register.organizationMobile" required="" />
+                    </div>
+                    <div>
+                      <input type="email" class="form-control" ng-model="register.organizationEmail" name="organizationEmail" placeholder="Email" required="" />
+                    </div>
+                           <div>
+                      <textarea class="form-control" name="organizationAddress" ng-model="register.organizationAddress" placeholder="Organization Address" required="" style="margin-bottom: 11px;"></textarea>
+                    </div>
+                    <div>
+                      <input type="text" class="form-control"  name="organizationZip" ng-model="register.organizationZip" placeholder="Organization Zip" required="" />
+                    </div>
+                    <div>
+                      <label class="light" for="FSSAI"><b> Do you have FSSAI certificate? </b></label> <input type="checkbox" ng-model="register.isHaveFSSAI" id="FSSAI" value="FSSAI" name="FSSAI"><br>
+           </div>
+              <div ng-show="register.isHaveFSSAI">
+              <input type="text" class="form-control"  id="OrganizationValidUpto"  placeholder="Valid up to"  name="organizationValidUpto" ng-model="register.organizationValidUpto">
+               </div>
+               <div>
+              <input type="text" class="form-control"  id="OrganizationVatNo"  placeholder="Vat Number" name="organizationVatNo" ng-model="register.organizationVatNo">
+         </div>
+                    <div>
+                      <input type="text" class="form-control" placeholder="Name" ng-model="register.userName" name="userName"  required="" />
+                    </div>
+                      <div>
+
+                     <input type="email" class="form-control" id="mail"  placeholder="User Email" name="user_email" ng-model="register.user_email" required>
+        </div> <div>
+
+                    <input type="text"  class="form-control" id="user_mobile" placeholder="User Mobile" maxlength="10"  pattern="[0-9]{10}" name="user_mobile" ng-model="register.user_mobile" required>
+              </div>
+                    <div>
+                      <input type="password" class="form-control" placeholder="Password" required=""  minlength="6" name="user_password" ng-model="register.user_password"/>
+                    </div>
+                    <div>
+                      <input type="password" class="form-control" ng-model="register.confirm_password" placeholder="Confirm Password" required=""  />
+                    </div>
+                    <div>
+                      <input type="file" class="form-control" name="file" id="uploadFile" placeholder="Logo" required=""  />
+                    </div>
+
+                    <div>
+                        <input type="submit" class="btn btn-success"  value="Submit"></input>
+
+      <!--
+                      <a class="btn btn-default submit">Submit</a>-->
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="separator">
+
+                      <p class="change_link">Already a member ?
+                        <a href="#tologin" class="to_register"> Log in </a>
+                      </p>
+                      <div class="clearfix"></div>
+                      <br />
+                      <div>
+                        <p>©2016 All Rights Reserved. Aguai Solutions.</p>
+                      </div>
+                    </div>
+                  </form>
+                  <!-- form -->
+                </section>
+                <!-- content -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+<script>
+var app = angular.module('app', []);
+app.controller('loginCtrl', function($scope,$http,$timeout) {
+   $scope.login={};
+   $scope.register={};
+  $scope.register.isHaveFSSAI=false;
+  $scope.register.organizationValidUpto="";
+  $scope.Login=function(isValid){
+      $http.post('/login/login',$scope.login).success(function(response){
+        console.log(response);
+        localStorage.setItem('logo_path',response.logo);
+        if(response.success){
+         window.location.href="/Dashboard";
+        }else{
+            $('.alert-danger').show(1000).delay(3000).hide(1000);;
+        $('#ErrorMessage2').html(response.data);
+        }
+       }).error(function(data, status) {
+         alert("Error while communicating server. Please try again.")
+        console.error('Repos error', status, data);
+      });
+  }
+
+});
+
+
+</script>
+
+<script>
+$(document).ready(function() {
+  $.getJSON("login/CheckEmail", function( data ) {
+    if(data.msg!=undefined){
+       $('.alert-success').show(1000).delay(3000).hide(1000);;
+        $('#ErrorMessage1').html(data.msg);
+    }
+  });
+
+  function validate(){
+    var flag=true;
+    var errorMsg="";
+    if($("#FSSAI").is(":checked")==true &&$("#OrganizationValidUpto").val()==""){
+          errorMsg+="please enter FSSAI certificate valid date.<br/>"
+            flag=false;
+            }
+       if($("#user_password").val()!=$("#confirm_password").val()){
+            errorMsg+="passoword and confirm password should be match.<br/>"
+            flag=false;
+      }
+     $.ajaxSetup({async:false});
+     $.ajax({
+              type: "POST",
+              url: "login/CheckDuplicate",
+              data:$('#regForm').serialize() ,
+              success: function(response) {
+                if(response.isCompanyExist)
+                errorMsg+="Organization name already exist.</br>"
+                if(response.isUserExist)
+                errorMsg+="Mobile No. Or Email  already exist.</br>"
+              }
+          });
+   $.ajaxSetup({async:true});
+   if(errorMsg!=""){
+        $('.alert-danger').show(1000).delay(3000).hide(1000);;
+        $('#ErrorMessage').html(errorMsg);
+         flag=false;
+   }
+     return flag;
+  }
+$('#regForm').submit(function() {
+
+$(this).ajaxSubmit({url: 'login/Register', type: 'post',beforeSubmit: validate,
+error: function(xhr) {
+  $('.alert-danger').show(1000).delay(3000).hide(1000);;
+  $('#ErrorMessage').html("Sign up failed,  please contact administrator.");
+console.log('Error: ' + xhr);
+},
+success: function(response) {
+   $('#regForm')[0].reset();
+    $('.alert-success').show(1000).delay(3000).hide(1000);;
+  $('#ErrorMessage3').html("Registration successful,  Check your Email to activate your store.");
+}
+});
+return false;
+});
+});
+</script>
+
+
+</body>
+
+</html>
